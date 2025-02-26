@@ -1,33 +1,40 @@
 import { serve } from '@hono/node-server'
 import { Hono } from 'hono'
-import { Collection, MongoClient } from 'mongodb'
+import { Collection, MongoClient, type WithId, type Document } from 'mongodb'
 import { cors } from 'hono/cors'
 import "dotenv/config"
 
 const app = new Hono()
-const mongoUserName = process.env.USR_MONGO 
-const mongoUserPWD = process.env.PWD_MONGO 
+const mongoUserName = process.env.USR_MONGO
+const mongoUserPWD = process.env.PWD_MONGO
 const mongoUri = `mongodb+srv://${mongoUserName}:${mongoUserPWD}@noahsarktest.znrgw.mongodb.net/`
 const client = new MongoClient(mongoUri, { monitorCommands: true });
 const dbName = 'sample_mflix'
 
-type queryFunc = (col: Collection) => {}
+type queryFunc = (col: Collection) => Promise<WithId<Document>[]>
 
-async function connDB(func: queryFunc) {
-  await client.connect()
-  console.log('Connected successfully to server');
-  const db = client.db(dbName)
-  const ction = db.collection('users');
+/* Connect to db to query 
+ * pass a function type queryFunc for callback
+ * */
+async function connDB(func: queryFunc): Promise<WithId<Document>[]> {
+  try {
+    await client.connect()
+    console.log('Connected successfully to server');
 
-  func(ction)
+    const db = client.db(dbName)
+    const ction = db.collection('users');
+    const res = func(ction)
 
-  return 'done'
+    return res
+  } catch (error) {
+    console.error('Error connecting to db or executing query', error);
+    throw error
+  } 
 }
 
-async function showMsg(collection: Collection): Promise<string>{
-  const findRes = await collection.find({}).toArray()
-  console.log(findRes);
-  return "Real";
+async function showMsg(collection: Collection): Promise<WithId<Document>[]> {
+  const findRes = await collection.find({}).limit(5).toArray()
+  return findRes;
 }
 
 app.use('/', cors({
@@ -40,19 +47,24 @@ app.get('/', (c) => {
   })
 })
 
-app.use('/messages', cors({
+app.use('/users', cors({
   origin: ['http://localhost:4200']
 }))
-app.get('/messages', (c) => {
-  return c.json({
-    message: 'Get the message from messages routes'
-  })
+app.get('/users', async (c) => {
+  try {
+    const msgs = await connDB(showMsg)
+    console.log(msgs);
+    return c.json(msgs)
+
+  } catch (error) {
+    console.error("Error fetching messages", error)
+    return c.json({ message: "Error fetching messages" }, 500)
+  }
 })
 
 serve({
   fetch: app.fetch,
   port: 3000
-}, (info) => {
-  connDB(showMsg)
+}, async (info) => {
   console.log(`Server is running on http://localhost:${info.port}`)
 })
