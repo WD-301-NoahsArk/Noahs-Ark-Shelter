@@ -1,3 +1,6 @@
 <p>httpclient works!</p>
-<p>{{ testData.ok }}</p>
-<p>{{ testData.message }}</p>
+<div *ngFor="let user of testData">
+  <p>Name: {{ user.name }}</p>
+  <p>Email: {{ user.email }}</p>
+  <hr>
+</div>

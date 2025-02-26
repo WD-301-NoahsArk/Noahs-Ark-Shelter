@@ -7,6 +7,6 @@ import { HttpClient } from '@angular/common/http'
 export class TestService {
   constructor(private http: HttpClient) { }
   getTest() {
-    return this.http.get("http://localhost:3000/messages")
+    return this.http.get("http://localhost:3000/users")
   }
 }
