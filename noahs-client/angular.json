@@ -3,7 +3,7 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "noahs-client": {
+    "noahs-client-vite": {
       "projectType": "application",
       "schematics": {},
       "root": "",
@@ -13,7 +13,7 @@
         "build": {
           "builder": "@angular-devkit/build-angular:application",
           "options": {
-            "outputPath": "dist/noahs-client",
+            "outputPath": "dist/noahs-client-vite",
             "index": "src/index.html",
             "browser": "src/main.ts",
             "polyfills": [
@@ -59,10 +59,10 @@
           "builder": "@angular-devkit/build-angular:dev-server",
           "configurations": {
             "production": {
-              "buildTarget": "noahs-client:build:production"
+              "buildTarget": "noahs-client-vite:build:production"
             },
             "development": {
-              "buildTarget": "noahs-client:build:development"
+              "buildTarget": "noahs-client-vite:build:development"
             }
           },
           "defaultConfiguration": "development"
