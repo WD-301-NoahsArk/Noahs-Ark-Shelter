@@ -9,6 +9,7 @@
     "dotenv": "^16.4.7",
     "hono": "^4.7.2",
     "mongodb": "^6.13.1",
+    "noahs-server": "file:",
     "typescript": "^5.7.3"
   },
   "devDependencies": {
