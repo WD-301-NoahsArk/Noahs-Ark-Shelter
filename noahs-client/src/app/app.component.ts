@@ -3,13 +3,17 @@ import { RouterOutlet } from '@angular/router';
 import { HttpClientModule } from '@angular/common/http';
 import { HttpclientComponent } from './httpclient/httpclient.component'
 import { TestService } from './test.service';
-
+import { NavbarComponent } from './component/navbar/navbar.component';
+import { OnInit } from '@angular/core';
+import { initFlowbite } from 'flowbite';
 @Component({
   selector: 'app-root',
   imports: [
     RouterOutlet,
     HttpClientModule,
-    HttpclientComponent
+    HttpclientComponent,
+    NavbarComponent,
+    
   ],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css',
@@ -17,6 +21,10 @@ import { TestService } from './test.service';
 })
 export class AppComponent {
   title = 'noahs-client';
+  ngOnInit(): void {
+    initFlowbite();
+  }
+
 }
 
 
