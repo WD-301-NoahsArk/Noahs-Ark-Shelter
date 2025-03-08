@@ -1,23 +1,20 @@
 import { Component } from '@angular/core';
 import { TestService } from '../test.service'
-import { HttpClientModule } from '@angular/common/http'
 import { CommonModule } from '@angular/common'
+import { Observable } from 'rxjs';
 
 @Component({
+  standalone: true,
   selector: 'app-httpclient',
-  imports: [ HttpClientModule, CommonModule ],
+  imports: [ CommonModule ],
   templateUrl: './httpclient.component.html',
   styleUrl: './httpclient.component.css',
   providers: [ TestService ],
 })
 export class HttpclientComponent {
-  testData: any;
+  testData$: Observable<any>;
 
-  constructor(private testClient: TestService) {
-    this.testClient.getTest().subscribe((data: any) => {
-      this.testData = data;
-      console.log(data);
-    })
+  constructor(private testService: TestService) {
+      this.testData$ = this.testService.getTest();
   }
 }
-
