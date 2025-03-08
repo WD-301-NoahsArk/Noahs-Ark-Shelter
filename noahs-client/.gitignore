@@ -7,17 +7,13 @@
 /bazel-out
 
 # Node
-node_modules
+/node_modules
 npm-debug.log
 yarn-error.log
 *lock.yaml
 *lock.yml
 *lock.json
 *lock.json
-
-# env
-.env
-.env.production
 
 # IDEs and editors
 .idea/
@@ -27,10 +23,9 @@ yarn-error.log
 *.launch
 .settings/
 *.sublime-workspace
-Session.vim
 
 # Visual Studio Code
-./.vscode/*
+.vscode/*
 !.vscode/settings.json
 !.vscode/tasks.json
 !.vscode/launch.json
