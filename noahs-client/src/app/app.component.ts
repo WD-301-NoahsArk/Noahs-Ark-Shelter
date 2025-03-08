@@ -1,22 +1,22 @@
-import { Component, Injectable } from '@angular/core';
+import { Component } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
-import { HttpClientModule } from '@angular/common/http';
-import { HttpclientComponent } from './httpclient/httpclient.component'
-import { TestService } from './test.service';
+import { CommonModule } from '@angular/common';
+import { HttpTestComponent } from './http-test/http-test.component';
+import { HttpService } from './http.service';
 
 @Component({
   selector: 'app-root',
   imports: [
     RouterOutlet,
-    HttpClientModule,
-    HttpclientComponent
+    CommonModule,
+    HttpTestComponent
   ],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css',
-  providers: [ TestService ]
+  providers: [
+    HttpService,
+  ]
 })
 export class AppComponent {
   title = 'noahs-client';
 }
-
-
