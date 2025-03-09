@@ -6,6 +6,8 @@ import { TestService } from './test.service';
 import { NavbarComponent } from './component/navbar/navbar.component';
 import { OnInit } from '@angular/core';
 import { initFlowbite } from 'flowbite';
+import { FooterComponent } from './component/footer/footer.component';
+
 @Component({
   selector: 'app-root',
   imports: [
@@ -13,6 +15,7 @@ import { initFlowbite } from 'flowbite';
     HttpClientModule,
     HttpclientComponent,
     NavbarComponent,
+    FooterComponent,
     
   ],
   templateUrl: './app.component.html',
