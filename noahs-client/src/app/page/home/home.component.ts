@@ -11,44 +11,43 @@ import type { InstanceOptions } from 'flowbite';
 export class HomeComponent implements OnInit {
 
   ngOnInit(): void {
-    // Make sure DOM is fully loaded before interacting with elements
+    // Initialize Flowbite components
     const carouselElement: HTMLElement | null = document.getElementById('carousel-example');
     if (!carouselElement) return;
 
     const items: CarouselItem[] = [
       {
         position: 0,
-        el: document.getElementById('carousel-item-1') as HTMLElement, // Type assertion
+        el: document.getElementById('carousel-item-1') as HTMLElement, 
       },
       {
         position: 1,
-        el: document.getElementById('carousel-item-2') as HTMLElement, // Type assertion
+        el: document.getElementById('carousel-item-2') as HTMLElement, 
       },
       {
         position: 2,
-        el: document.getElementById('carousel-item-3') as HTMLElement, // Type assertion
+        el: document.getElementById('carousel-item-3') as HTMLElement, 
       },
     ];
-
-    // object options with default values
+    
     const options: CarouselOptions = {
-      defaultPosition: 1,
-      interval: 3000,
+      defaultPosition: 0,
+      interval: 5000,
       indicators: {
         activeClasses: 'bg-maincolor-200 dark:bg-maincolor-200',
         inactiveClasses: 'bg-white',
         items: [
           {
             position: 0,
-            el: document.getElementById('carousel-indicator-1') as HTMLElement, // Type assertion
+            el: document.getElementById('carousel-indicator-1') as HTMLElement, 
           },
           {
             position: 1,
-            el: document.getElementById('carousel-indicator-2') as HTMLElement, // Type assertion
+            el: document.getElementById('carousel-indicator-2') as HTMLElement, 
           },
           {
             position: 2,
-            el: document.getElementById('carousel-indicator-3') as HTMLElement, // Type assertion
+            el: document.getElementById('carousel-indicator-3') as HTMLElement, 
           },
         ],
       },

@@ -1,12 +1,13 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { FormComponent } from "../../component/form/form.component";
 
 @Component({
   selector: 'app-adoption',
   templateUrl: './adoption.component.html',
   styleUrls: ['./adoption.component.css'],
   standalone: true,
-  imports: [CommonModule]
+  imports: [CommonModule, FormComponent]
 })
 export class AdoptionComponent {
   pets = [
@@ -19,7 +20,7 @@ export class AdoptionComponent {
   ];
 
   selectedPet: any = null;
-  isAdoptionFormOpen: boolean = false;
+
 
   // Opens the pet details modal
   openModal(pet: any) {
@@ -31,14 +32,5 @@ export class AdoptionComponent {
     this.selectedPet = null;
   }
 
-  // Opens the adoption form modal
-  openAdoptionForm() {
-    this.isAdoptionFormOpen = true;
-    console.log('Adoption form modal opened!');
-  }
 
-  // Closes the adoption form modal
-  closeAdoptionForm() {
-    this.isAdoptionFormOpen = false;
-  }
 }

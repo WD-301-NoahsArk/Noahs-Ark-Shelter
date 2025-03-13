@@ -1,0 +1,14 @@
+button {
+    border: none;
+    cursor: pointer;
+    outline: none;
+  }
+  
+  button:hover {
+    background-color: rgba(206, 191, 144, 0.9); 
+  }
+  
+  button:focus {
+    box-shadow: 0 0 0 3px rgba(206, 191, 144, 0.5); 
+  }
+  
