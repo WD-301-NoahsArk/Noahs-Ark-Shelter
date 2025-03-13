@@ -12,6 +12,8 @@ npm-debug.log
 yarn-error.log
 *lock.yaml
 *lock.yml
+*lock.json
+*lock.json
 
 # env
 .env

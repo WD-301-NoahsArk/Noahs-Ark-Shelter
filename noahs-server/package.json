@@ -2,7 +2,7 @@
   "name": "noahs-server",
   "type": "module",
   "scripts": {
-    "dev": "tsx watch src/index.ts"
+    "dev": "tsx watch src/server.ts"
   },
   "dependencies": {
     "@hono/node-server": "^1.13.8",
