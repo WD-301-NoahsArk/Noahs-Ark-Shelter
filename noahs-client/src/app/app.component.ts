@@ -1,30 +1,35 @@
 import { Component } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
-import { CommonModule } from '@angular/common';
-import { HttpTestComponent } from './http-test/http-test.component';
-import { HttpService } from './http.service';
+import { HttpClientModule } from '@angular/common/http';
+import { HttpclientComponent } from './httpclient/httpclient.component';
+import { TestService } from './test.service';
+import { NavbarComponent } from './component/navbar/navbar.component';
+import { OnInit } from '@angular/core';
+import { initFlowbite } from 'flowbite';
+import { FooterComponent } from "./component/footer/footer.component";
 
 @Component({
   selector: 'app-root',
   imports: [
     RouterOutlet,
-    CommonModule,
-    HttpTestComponent
-  ],
+    HttpClientModule,
+    HttpclientComponent,
+    NavbarComponent,
+    FooterComponent,
+],
   templateUrl: './app.component.html',
-  styleUrl: './app.component.css',
-  providers: [
-    HttpService,
-  ]
+  styleUrls: ['./app.component.css'], // Corrected property name
+  providers: [ TestService ]
 })
-export class AppComponent {
+export class AppComponent implements OnInit {
   title = 'noahs-client';
+
   ngOnInit(): void {
     initFlowbite();
   }
 
+  onSubmit() {
+    console.log('Confirmation button clicked!');
+    alert('Confirmation successful!');
+  }
 }
-function initFlowbite() {
-  throw new Error('Function not implemented.');
-}
-
