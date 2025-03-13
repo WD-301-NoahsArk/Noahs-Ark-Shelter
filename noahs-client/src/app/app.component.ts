@@ -19,4 +19,12 @@ import { HttpService } from './http.service';
 })
 export class AppComponent {
   title = 'noahs-client';
+  ngOnInit(): void {
+    initFlowbite();
+  }
+
 }
+function initFlowbite() {
+  throw new Error('Function not implemented.');
+}
+
