@@ -28,7 +28,7 @@ app.post('/login', async (c) => {
   const user = await collections.staff.findOne({ email });
 
   if (!user || !(await bcrypt.compare(password, user.password))) {
-    return c.json({ message: 'Invalid credentials' }, 401);
+    return c.json({ message: 'Invalid credentials for login' }, 401);
   }
 
   const token = jwt.sign({ id: user._id, role: user.role }, JWT_SECRET, { expiresIn: '1h' });

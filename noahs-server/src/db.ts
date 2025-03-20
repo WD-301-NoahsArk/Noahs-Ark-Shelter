@@ -25,7 +25,7 @@ export async function connDB(func: queryFunc): Promise<WithId<Document>[]> {
   } catch (error) {
     console.error('Error connecting to db or executing query', error);
     throw error
-  } 
+  }
 }
 
 export const collections = {
@@ -55,7 +55,7 @@ function isValidPassword(password: string): password is Password {
 // 000-000-0000 FORMAT
 type PhoneNumber = `${number}-${number}-${number}`;
 function isValidPhone(phone: string): phone is PhoneNumber {
-  return /^\d{3}-\d{3}-\d{4}$/.test(phone);
+  return /^\d{4}-\d{3}-\d{4}$/.test(phone);
 }
 
 /**
@@ -83,7 +83,7 @@ function isValidPhone(phone: string): phone is PhoneNumber {
  * }
  */
 
-type Staff = {
+export type Staff = {
   first_name: string;
   last_name: string;
   user_name: string;
@@ -91,25 +91,63 @@ type Staff = {
   phone: PhoneNumber;
   password: Password;
   birthdate: DateString;
+  role: "admin" | "staff";
 };
 
-function preprocessStaff(data: any): Staff | null {
-  if (
-    isValidDate(data.birthdate) &&
-    isValidPhone(data.phone) &&
-    isValidPassword(data.password)
-  ) {
-    return {
-      first_name: data.first_name.trim(),
-      last_name: data.last_name.trim(),
-      user_name: data.user_name.toLowerCase().trim(),
-      email: data.email.toLowerCase().trim(),
-      phone: data.phone as PhoneNumber,
-      password: data.password as Password,
-      birthdate: data.birthdate as DateString,
-    };
+type ValidationError = {
+  field: string;
+  message: string;
+}
+
+export function preprocessStaff(data: Staff): [Staff | null, ValidationError | null] {
+  const requiredFields: (keyof Staff)[] = ['first_name', 'last_name', 'user_name', 'email', 'phone', 'password', 'birthdate', 'role'];
+  for (const field of requiredFields) {
+    if (!data[field]) {
+      return [null, {
+        field,
+        message: `${field} is required`
+      }];
+    }
   }
-  return null;
+
+  if (!isValidDate(data.birthdate)) {
+    return [null, {
+      field: 'birthdate',
+      message: 'Invalid date format. Use YYYY-MM-DD format'
+    }];
+  }
+
+  if (!isValidPhone(data.phone)) {
+    return [null, {
+      field: 'phone',
+      message: 'Invalid phone number format. Use XXXX-XXX-XXXX format'
+    }];
+  }
+
+  if (!isValidPassword(data.password)) {
+    return [null, {
+      field: 'password',
+      message: 'Password must be at least 8 characters long'
+    }];
+  }
+
+  if (data.role !== "admin" && data.role !== "staff") {
+    return [null, {
+      field: 'role',
+      message: 'Invalid role. Must be either "admin" or "staff"'
+    }];
+  }
+
+  return [{
+    first_name: data.first_name.trim(),
+    last_name: data.last_name.trim(),
+    user_name: data.user_name.toLowerCase().trim(),
+    email: data.email.toLowerCase().trim(),
+    phone: data.phone as PhoneNumber,
+    password: data.password as Password,
+    birthdate: data.birthdate as DateString,
+    role: data.role
+  }, null];
 }
 
 /**
@@ -149,7 +187,7 @@ type Animal = {
 
 function preprocessAnimal(data: any): Animal | null {
   if (
-    isValidDate(data.rescue_date) 
+    isValidDate(data.rescue_date)
   ) {
     return {
       name: data.name.trim(),
@@ -202,7 +240,7 @@ type Adoptee = {
 function preprocessAdoptee(data: any): Adoptee | null {
   if (
     isValidDate(data.date_avail) &&
-    isValidPhone(data.phone) 
+    isValidPhone(data.phone)
   ) {
     return {
       first_name: data.first_name.trim(),
@@ -253,7 +291,7 @@ type Event = {
 function preprocessEvent(data: any): Event | null {
   if (
     isValidDate(data.start_date) &&
-    isValidDate(data.end_date) 
+    isValidDate(data.end_date)
   ) {
     return {
       title: data.title.trim(),

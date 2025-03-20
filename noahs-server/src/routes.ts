@@ -1,11 +1,10 @@
 import { Hono } from "hono";
 import { authenticate, authorize } from "./middleware.js";
-import { collections } from "./db.js";
+import { preprocessStaff, collections } from "./db.js";
 import { ObjectId } from "mongodb";
 import jwt from "jsonwebtoken";
 import bcrypt from "bcryptjs";
 import "dotenv/config";
-import client from "./db.js";
 
 
 const app = new Hono();
@@ -30,14 +29,14 @@ app.post("/login", async (c) => {
   const user = await collections.staff.findOne({ email });
   if (!user) {
     console.log("User not found!");
-    return c.json({ message: "Invalid credentials" }, 401);
+    return c.json({ message: "Invalid credentials email" }, 401);
   }
 
   console.log("User found:", user.email);
 
   if (!user.password) {
     console.error("User password is missing in DB!");
-    return c.json({ message: "Invalid credentials" }, 401);
+    return c.json({ message: "Invalid credentials password" }, 401);
   }
 
   const isMatch = await bcrypt.compare(password, user.password);
@@ -45,7 +44,7 @@ app.post("/login", async (c) => {
 
   if (!isMatch) {
     console.log("Passwords do NOT match!");
-    return c.json({ message: "Invalid credentials" }, 401);
+    return c.json({ message: "Invalid credentials password does not match" }, 401);
   }
 
   const token = jwt.sign({ id: user._id, role: user.role }, JWT_SECRET, { expiresIn: "1h" });
@@ -56,20 +55,28 @@ app.post("/login", async (c) => {
 
 // CRUD STAFF
 app.post("/staff", authorize(["admin"]), async (c) => {
-  const data = await c.req.json();
-  const staffMember: Staff | null = client.preprocessStaff(data); // Validate and preprocess data
+  try {
+    const data = await c.req.json();
+    const [staffMember, err] = preprocessStaff(data);
 
-  if (!staffMember) {
-    return c.json({ message: "Invalid staff data" }, 400);
+    if (err) {
+      return c.json({
+        message: "Invalid staff data",
+        error: err
+      }, 400)
+    }
+    
+    const existingUser = await collections.staff.findOne({ email: staffMember!.email });
+    if (existingUser) {
+      return c.json({ message: "Staff already exists!" }, 400);
+    }
+    
+    const result = await collections.staff.insertOne(staffMember!);
+    return c.json({ message: "Staff created!", id: result.insertedId }, 201);
+  } catch (error) {
+    console.error("Error processing staff request:", error);
+    return c.json({ message: "Server error occurred" }, 500);
   }
-
-  const existingUser  = await collections.staff.findOne({ email: staffMember.email });
-  if (existingUser ) {
-    return c.json({ message: "Staff already exists!" }, 400);
-  }
-
-  const result = await collections.staff.insertOne(staffMember);
-  return c.json({ message: "Staff created!", id: result.insertedId }, 201);
 });
 
 app.put("/staff/:id", authorize(["admin"]), async (c) => {
@@ -163,7 +170,3 @@ app.get("/admin", authorize(["admin"]), async (c) => {
 });
 
 export default app;
-function preprocessStaff(data: any) {
-  throw new Error("Function not implemented.");
-}
-
