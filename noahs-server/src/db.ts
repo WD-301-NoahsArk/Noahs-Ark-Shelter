@@ -35,8 +35,9 @@ export const collections = {
   events: db.collection('event_col'),
 };
 
+// Date
 type DateString = `${number}-${number}-${number}`;
-function isValidDate(date: DateString): boolean {
+export function isValidDate(date: DateString): boolean {
   const regex = /^\d{4}-\d{2}-\d{2}$/;
   if (!regex.test(date)) return false;
 
@@ -48,15 +49,37 @@ function isValidDate(date: DateString): boolean {
 
 // Password should be >=8
 type Password = string & { __type: "Password" };
-function isValidPassword(password: string): password is Password {
+export function isValidPassword(password: string): password is Password {
   return password.length >= 8;
 }
 
-// 000-000-0000 FORMAT
+// 0000-000-0000 FORMAT
 type PhoneNumber = `${number}-${number}-${number}`;
-function isValidPhone(phone: string): phone is PhoneNumber {
+export function isValidPhone(phone: string): phone is PhoneNumber {
   return /^\d{4}-\d{3}-\d{4}$/.test(phone);
 }
+
+// Date with Time 
+type DateTimeString = `${number}-${number}-${number} ${number}:${number}`;
+export function isValidDateTime(dateTime: DateTimeString): boolean {
+  const regex = /^\d{4}-\d{2}-\d{2} \d{2}:\d{2}$/;
+  if (!regex.test(dateTime)) return false;
+
+  const [datePart, timePart] = dateTime.split(" ");
+  const [year, month, day] = datePart.split("-").map(Number);
+  const [hour, minute] = timePart.split(":").map(Number);
+
+  const dt = new Date(year, month - 1, day, hour, minute);
+  return (
+    dt.getFullYear() === year &&
+    dt.getMonth() === month - 1 &&
+    dt.getDate() === day &&
+    dt.getHours() === hour &&
+    dt.getMinutes() === minute
+  );
+}
+
+
 
 /**
  * Preprocesses and validates staff data before insertion.
@@ -70,7 +93,7 @@ function isValidPhone(phone: string): phone is PhoneNumber {
  *   last_name: " Doe ",
  *   user_name: "JohnDoe",
  *   email: "JohnDoe@example.com",
- *   phone: "123-456-7890",
+ *   phone: "0912-345-6789,
  *   password: "securepassword",
  *   birthdate: "1990-12-25",
  * };
@@ -157,7 +180,7 @@ export function preprocessStaff(data: Staff): [Staff | null, ValidationError | n
  * @returns {Animal | null} - Returns a validated and formatted Staff object, or null if validation fails.
  *
  * @example
- * const animalInfo: Animal = {
+ * const animalInfo = {
  *   name: "Amber",
  *   rescue_date: "1999-01-01", // YYYY-MM-DD FORMAT
  *   personality: ["Energetic", "Chaotic"],
@@ -175,7 +198,7 @@ export function preprocessStaff(data: Staff): [Staff | null, ValidationError | n
  * }
  */
 
-type Animal = {
+export type Animal = {
   name: string,
   rescue_date: DateString,
   personality: string,
@@ -185,21 +208,33 @@ type Animal = {
   animal_pic: string
 }
 
-function preprocessAnimal(data: any): Animal | null {
-  if (
-    isValidDate(data.rescue_date)
-  ) {
-    return {
-      name: data.name.trim(),
-      rescue_date: data.rescue_date as DateString,
-      personality: data.personality.trim(),
-      breed: data.breed.trim(),
-      status: data.status.trim(),
-      code: data.code.trim(),
-      animal_pic: data.animal_pic.trim()
-    };
+export function preprocessAnimal(data: Animal): [Animal | null, ValidationError | null] {
+  const requiredFields: (keyof Animal) [] = ['name', 'rescue_date', 'personality','breed', 'status', 'code', 'animal_pic'];
+  for (const field of requiredFields) {
+    if(!data[field]) {
+      return [null, {
+        field,
+        message: `${field} is required`
+      }];
+    }
   }
-  return null;
+
+  if (!isValidDate(data.rescue_date)) {
+    return [null, {
+      field: 'rescue_date',
+      message: 'Invalid Rescue Date format. Please use YYYY-MM-DD'
+    }];
+  }
+
+  return[{
+    name: data.name.trim(),
+    rescue_date: data.rescue_date as DateString,
+    personality: data.personality.trim(),
+    breed: data.breed.trim(),
+    status: data.status,
+    code: data.code.trim(),
+    animal_pic: data.animal_pic.trim()
+  }, null];
 }
 
 
@@ -210,13 +245,13 @@ function preprocessAnimal(data: any): Animal | null {
  * @returns {Adoptee | null} - Returns a validated and formatted Staff object, or null if validation fails.
  *
  * @example
- * const adopteeInfo: Adoptee = {
+ * const adopteeInfo = {
  *   first_name: "Maria",
  *   last_name: "Estrada", 
  *   email: "mariaest@example.com",
- *   phone: "09123456789",
+ *   phone: "0912-345-6789",
  *   animal_code: "1ed0e640sg",
- *   date_avail: "2025-04-18" // YYYY-MM-DD FORMAT
+ *   date_avail: "2025-04-18" // YYYY-MM-DD HH:MM FORMAT
  * };
  *
  * const adopteeData = preprocessAdoptee(adopteeInfo);
@@ -227,32 +262,50 @@ function preprocessAnimal(data: any): Animal | null {
  * }
  */
 
-type Adoptee = {
+export type Adoptee = {
   first_name: string,
   last_name: string,
   user_name: string,
   email: string,
   phone: PhoneNumber,
   animal_code: string,
-  date_avail: DateString
+  date_avail: DateTimeString
 }
 
-function preprocessAdoptee(data: any): Adoptee | null {
-  if (
-    isValidDate(data.date_avail) &&
-    isValidPhone(data.phone)
-  ) {
-    return {
-      first_name: data.first_name.trim(),
-      last_name: data.last_name.trim(),
-      user_name: data.user_name.toLowerCase().trim(),
-      email: data.email.toLowerCase().trim(),
-      phone: data.phone as PhoneNumber,
-      animal_code: data.animal_code.trim(),
-      date_avail: data.date_avail as DateString,
-    };
+export function preprocessAdoptee(data: Adoptee): [Adoptee | null, ValidationError | null ] {
+  const requiredFields: (keyof Adoptee)[] = ['first_name', 'last_name', 'user_name', 'email', 'phone', 'animal_code', 'date_avail'];
+  for (const field of requiredFields) {
+    if (!data[field]) {
+      return [null, {
+        field,
+        message: `${field} is required`
+      }];
+    }
   }
-  return null;
+
+  if (!isValidDateTime(data.date_avail)) {
+    return [null, {
+      field: 'date_avail',
+      message: 'Invalid date format. Please use YYYY-MM-DD HH:MM'
+    }];
+  }
+
+  if (!isValidPhone(data.phone)) {
+    return [null, {
+      field: 'phone',
+      message: 'Invalid phone number format. Use XXXX-XXX-XXXX format'
+    }];
+  }
+
+  return [{
+    first_name: data.first_name.trim(),
+    last_name: data.last_name.trim(),
+    user_name: data.user_name.toLowerCase().trim(),
+    email: data.email.toLowerCase().trim(),
+    phone: data.phone as PhoneNumber,
+    animal_code: data.animal_code.trim(),
+    date_avail: data.date_avail as DateTimeString
+  }, null];
 }
 
 /**
@@ -262,7 +315,7 @@ function preprocessAdoptee(data: any): Adoptee | null {
  * @returns {Event | null} - Returns a validated and formatted Staff object, or null if validation fails.
  *
  * @example
- * const eventInfo: Event = {
+ * const eventInfo = {
  *   title: "Fun Run",
  *   details: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.", 
  *   thumbnail: "path/to/pic",
@@ -279,31 +332,43 @@ function preprocessAdoptee(data: any): Adoptee | null {
  * }
  */
 
-type Event = {
-  title: string,
-  details: string,
-  thumbnail: string,
-  venue: string,
-  start_date: DateString,
-  end_date: DateString
+export type Event = {
+  title: string;
+  details: string;
+  thumbnail: string;
+  venue: string;
+  start_date: DateTimeString;
+  end_date: DateTimeString;
+};
+
+export function preprocessEvent(data: Event): [Event | null, ValidationError | null] {
+  const requiredFields: (keyof Event)[] = ['title', 'details', 'thumbnail', 'venue', 'start_date', 'end_date'];
+  for (const field of requiredFields) {
+    if (!data[field]) {
+      return [null, {
+        field,
+        message: `${field} is required`
+      }];
+    }
+  }
+
+  if (!isValidDateTime(data.start_date) || !isValidDateTime(data.end_date)) {
+    return [null, {
+      field: 'date',
+      message: 'Invalid date format. Please use YYYY-MM-DD HH:MM format'
+    }];
+  }
+
+  return [{
+    title: data.title.trim(),
+    details: data.details.trim(),
+    thumbnail: data.thumbnail.trim(),
+    venue: data.venue.trim(),
+    start_date: data.start_date as DateTimeString,
+    end_date: data.end_date as DateTimeString
+  }, null];
 }
 
-function preprocessEvent(data: any): Event | null {
-  if (
-    isValidDate(data.start_date) &&
-    isValidDate(data.end_date)
-  ) {
-    return {
-      title: data.title.trim(),
-      details: data.details.trim(),
-      thumbnail: data.thumbnail.trim(),
-      venue: data.venue.trim(),
-      start_date: data.start_date as DateString,
-      end_date: data.end_date as DateString
-    };
-  }
-  return null;
-}
 
 
 export default client;
