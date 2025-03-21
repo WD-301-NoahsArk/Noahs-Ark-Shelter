@@ -18,18 +18,18 @@ export class HomeComponent implements OnInit {
     const items: CarouselItem[] = [
       {
         position: 0,
-        el: document.getElementById('carousel-item-1') as HTMLElement, 
+        el: document.getElementById('carousel-item-1') as HTMLElement,
       },
       {
         position: 1,
-        el: document.getElementById('carousel-item-2') as HTMLElement, 
+        el: document.getElementById('carousel-item-2') as HTMLElement,
       },
       {
         position: 2,
-        el: document.getElementById('carousel-item-3') as HTMLElement, 
+        el: document.getElementById('carousel-item-3') as HTMLElement,
       },
     ];
-    
+
     const options: CarouselOptions = {
       defaultPosition: 0,
       interval: 5000,
@@ -39,15 +39,15 @@ export class HomeComponent implements OnInit {
         items: [
           {
             position: 0,
-            el: document.getElementById('carousel-indicator-1') as HTMLElement, 
+            el: document.getElementById('carousel-indicator-1') as HTMLElement,
           },
           {
             position: 1,
-            el: document.getElementById('carousel-indicator-2') as HTMLElement, 
+            el: document.getElementById('carousel-indicator-2') as HTMLElement,
           },
           {
             position: 2,
-            el: document.getElementById('carousel-indicator-3') as HTMLElement, 
+            el: document.getElementById('carousel-indicator-3') as HTMLElement,
           },
         ],
       },
