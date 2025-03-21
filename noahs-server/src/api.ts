@@ -31,7 +31,7 @@ app.post('/login', async (c) => {
     return c.json({ message: 'Invalid credentials for login' }, 401);
   }
 
-  const token = jwt.sign({ id: user._id, role: user.role }, JWT_SECRET, { expiresIn: '1h' });
+  const token = jwt.sign({ id: user._id, role: user.role }, JWT_SECRET, { expiresIn: '4h' });
   return c.json({ token });
 });
 

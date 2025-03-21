@@ -47,7 +47,7 @@ app.post("/login", async (c) => {
     return c.json({ message: "Invalid credentials password does not match" }, 401);
   }
 
-  const token = jwt.sign({ id: user._id, role: user.role }, JWT_SECRET, { expiresIn: "1h" });
+  const token = jwt.sign({ id: user._id, role: user.role }, JWT_SECRET, { expiresIn: "4h" });
   console.log("JWT Token generated");
 
   return c.json({ token });
