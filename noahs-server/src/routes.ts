@@ -1,5 +1,5 @@
 import { Hono } from "hono";
-import { authenticate, authorize } from "./middleware.js";
+import { authenticate, authorize, corsTest } from "./middleware.js";
 import { preprocessStaff, collections } from "./db.js";
 import { ObjectId } from "mongodb";
 import jwt from "jsonwebtoken";
@@ -14,6 +14,7 @@ if (!JWT_SECRET) {
 }
 
 // Public Routes
+app.use(corsTest);
 app.get("/", (c) => c.text("API is running!"));
 app.get("/staff", async (c) => c.json(await collections.staff.find().toArray()));
 app.get("/animals", async (c) => c.json(await collections.animals.find().toArray()));
