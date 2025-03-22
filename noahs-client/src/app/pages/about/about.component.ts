@@ -22,6 +22,10 @@ export class AboutComponent implements OnInit {
       nextButton.addEventListener('click', () => this.changeSlide(this.currentSlide + 1));
     }
 
+    this.indicators.forEach((indicator, index) => {
+      indicator.addEventListener('click', () => this.changeSlide(index));
+    });
+
     this.updateCarousel();
   }
 
