@@ -9,7 +9,7 @@ import { ButtonComponent } from '../../component/button/button.component';
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.css'],
   imports: [
-    ButtonComponent
+    ButtonComponent,
   ]
 })
 export class HomeComponent implements OnInit {
@@ -98,5 +98,9 @@ export class HomeComponent implements OnInit {
         carousel.next();
       });
     }
+  }
+
+  adoptFunc = () => {
+    window.location.href = '/adoption'
   }
 }
