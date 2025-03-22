@@ -1,6 +1,6 @@
- /** @type {import('tailwindcss').Config} */
- export default {
-  content: ["./src/**/*.{html,js}"],
+/** @type {import('tailwindcss').Config} */
+export default {
+  content: ["./src/**/*.{html,js,ts}"],
   theme: {
     extend: {
       colors: {
@@ -18,6 +18,7 @@
       },
       fontFamily: {
         'monserrat': ['Montserrat'],
+        'alternates': ['Montserrat Alternates']
       },
     },
   },

@@ -1,10 +1,10 @@
-import { serve } from '@hono/node-server'
-import { app } from './routes'
-import "dotenv/config"
+import { serve } from "@hono/node-server";
+import api from "./api.js";
+import routes from "./routes.js";
 
-serve({
-  fetch: app.fetch,
-  port: 3000
-}, async (info) => {
-  console.log(`Server is running on http://localhost:${info.port}`)
-})
+const app = api; 
+app.route("/", routes); 
+
+const port = process.env.PORT || 3000;
+console.log(`Server running on http://localhost:${port}`);
+serve({fetch: app.fetch, port: Number(port),});
