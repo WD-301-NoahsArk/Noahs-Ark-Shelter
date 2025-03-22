@@ -2,11 +2,15 @@ import { Component, OnInit } from '@angular/core';
 import { Carousel } from 'flowbite';
 import type { CarouselItem, CarouselOptions, CarouselInterface } from 'flowbite';
 import type { InstanceOptions } from 'flowbite';
+import { ButtonComponent } from '../../component/button/button.component';
 
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
-  styleUrls: ['./home.component.css']
+  styleUrls: ['./home.component.css'],
+  imports: [
+    ButtonComponent
+  ]
 })
 export class HomeComponent implements OnInit {
 
