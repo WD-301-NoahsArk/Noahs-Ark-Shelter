@@ -32,11 +32,10 @@ export class HomeComponent implements OnInit {
         position: 2,
         el: document.getElementById('carousel-item-3') as HTMLElement,
       },
-    ];
+    ]
 
     const options: CarouselOptions = {
       defaultPosition: 0,
-      interval: 5000,
       indicators: {
         activeClasses: 'bg-maincolor-200 dark:bg-maincolor-200',
         inactiveClasses: 'bg-white',
@@ -55,15 +54,6 @@ export class HomeComponent implements OnInit {
           },
         ],
       },
-      onNext: () => {
-        console.log('next slider item is shown');
-      },
-      onPrev: () => {
-        console.log('previous slider item is shown');
-      },
-      onChange: () => {
-        console.log('new slider item has been shown');
-      },
     };
 
     // instance options object
@@ -74,11 +64,25 @@ export class HomeComponent implements OnInit {
 
     const carousel: CarouselInterface = new Carousel(carouselElement, items, options, instanceOptions);
 
-    carousel.cycle();
-
     // set event listeners for prev and next buttons
     const $prevButton = document.getElementById('data-carousel-prev');
     const $nextButton = document.getElementById('data-carousel-next');
+
+    const resetCarousel = () => {
+      carousel.prev()
+      carousel.prev()
+      return
+    }
+
+    const cycleCarousel = () => {
+      if (carousel._activeItem.position === items.length - 1) {
+        resetCarousel()
+        return
+      }
+      carousel.next()
+    }
+
+    setInterval(cycleCarousel, 5000)
 
     if ($prevButton && $nextButton) {
       $prevButton.addEventListener('click', () => {
@@ -86,6 +90,11 @@ export class HomeComponent implements OnInit {
       });
 
       $nextButton.addEventListener('click', () => {
+        if (carousel._activeItem.position === items.length - 1) {
+          carousel.prev()
+          carousel.prev()
+          return
+        }
         carousel.next();
       });
     }
