@@ -20,39 +20,39 @@ app.get("/staff", async (c) => c.json(await collections.staff.find().toArray()))
 app.get("/animals", async (c) => c.json(await collections.animals.find().toArray()));
 app.get("/events", async (c) => c.json(await collections.events.find().toArray()));
 
+//app.post("/login", async (c) => {
+//  const { email, password } = await c.req.json();
+//  console.log("Login attempt for email:", email);
+//
+//  const user = await collections.staff.findOne({ email });
+//  if (!user) {
+//    console.log("User not found!");
+//    return c.json({ message: "Invalid credentials email" }, 401);
+//  }
+//
+//  console.log("User found:", user.email);
+//
+//  if (!user.password) {
+//    console.error("User password is missing in DB!");
+//    return c.json({ message: "Invalid credentials password" }, 401);
+//  }
+//
+//  const isMatch = await bcrypt.compare(password, user.password);
+//  console.log("Password match status:", isMatch);
+//
+//  if (!isMatch) {
+//    console.log("Passwords do NOT match!");
+//    return c.json({ message: "Invalid credentials password does not match" }, 401);
+//  }
+//
+//  const token = jwt.sign({ id: user._id, role: user.role }, JWT_SECRET, { expiresIn: "4h" });
+//  console.log("JWT Token generated");
+//
+//  return c.json({ token });
+//});
+
 // LogIn
 app.use("*", authenticate);
-
-app.post("/login", async (c) => {
-  const { email, password } = await c.req.json();
-  console.log("Login attempt for email:", email);
-
-  const user = await collections.staff.findOne({ email });
-  if (!user) {
-    console.log("User not found!");
-    return c.json({ message: "Invalid credentials email" }, 401);
-  }
-
-  console.log("User found:", user.email);
-
-  if (!user.password) {
-    console.error("User password is missing in DB!");
-    return c.json({ message: "Invalid credentials password" }, 401);
-  }
-
-  const isMatch = await bcrypt.compare(password, user.password);
-  console.log("Password match status:", isMatch);
-
-  if (!isMatch) {
-    console.log("Passwords do NOT match!");
-    return c.json({ message: "Invalid credentials password does not match" }, 401);
-  }
-
-  const token = jwt.sign({ id: user._id, role: user.role }, JWT_SECRET, { expiresIn: "4h" });
-  console.log("JWT Token generated");
-
-  return c.json({ token });
-});
 
 // CRUD STAFF
 app.post("/staff", authorize(["admin"]), async (c) => {
@@ -166,6 +166,7 @@ app.delete("/adoptees/:id", authorize(["admin"]), async (c) => {
 });
 
 // get /admin
+app.use(corsTest);
 app.get("/admin", authorize(["admin"]), async (c) => {
   return c.json({ message: "Welcome, Admin!" });
 });

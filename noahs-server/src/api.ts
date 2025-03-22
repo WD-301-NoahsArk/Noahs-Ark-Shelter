@@ -2,6 +2,7 @@ import { Hono } from 'hono';
 import { collections } from '../src/db.js';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
+import { corsTest } from './middleware.js';
 
 const app = new Hono();
 const JWT_SECRET = process.env.JWT_SECRET || 'fallback-secret';
@@ -23,8 +24,10 @@ app.post('/register', async (c) => {
 });
 
 //Logging in
+app.use(corsTest)
 app.post('/login', async (c) => {
   const { email, password } = await c.req.json();
+  
   const user = await collections.staff.findOne({ email });
 
   if (!user || !(await bcrypt.compare(password, user.password))) {
@@ -32,6 +35,7 @@ app.post('/login', async (c) => {
   }
 
   const token = jwt.sign({ id: user._id, role: user.role }, JWT_SECRET, { expiresIn: '4h' });
+  console.log('JWT Token generated');
   return c.json({ token });
 });
 

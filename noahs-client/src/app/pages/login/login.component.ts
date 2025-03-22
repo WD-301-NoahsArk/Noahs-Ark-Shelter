@@ -14,7 +14,30 @@ import { ButtonComponent } from '../../component/button/button.component';
   providers: [HttpService]
 })
 export class LoginComponent {
-  loginFunc() {
-    console.log("login clicked");
+  token = ""
+  getLoginCredentials() {
+    let htmlEmail = document.querySelector("#email") as HTMLInputElement;
+    let htmlPass = document.querySelector("#user_pass") as HTMLInputElement;
+    let email = htmlEmail.value;
+    let pass = htmlPass.value;
+
+    htmlEmail.value = "";
+    htmlPass.value = "";
+    return { userEmail: email, userPass: pass };
   }
+
+  constructor(private http: HttpService) { }
+
+  // janedoe@example.com
+  // secpass
+  loginFunc() {
+  let { userEmail, userPass } = this.getLoginCredentials();
+    this.http.loginAdmin(userEmail, userPass).subscribe(res => {
+      this.token = res.token;
+      this.http.goAdmin(this.token).subscribe(res => {
+        console.log(res.message)
+      });
+    })
+  }
+
 }
