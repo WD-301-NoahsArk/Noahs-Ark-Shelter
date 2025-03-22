@@ -9,6 +9,7 @@ import { ButtonComponent } from '../../component/button/button.component';
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.css'],
   imports: [
+    ButtonComponent,
   ]
 })
 export class HomeComponent implements OnInit {
