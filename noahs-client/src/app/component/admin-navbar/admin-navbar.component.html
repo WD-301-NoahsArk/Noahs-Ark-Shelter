@@ -1,0 +1,31 @@
+<nav class="bg-yellow-200 p-4 shadow-md flex justify-between items-center">
+  <div class="container mx-auto flex justify-between items-center xl:h-24">
+    <a href=""><img src="assets/images/logo.png" alt="logo" href="/" class="w-32 h-32"></a>
+    <span class="text-lg font-bold">Admin Panel</span>
+  </div>
+
+  <!-- Desktop Links -->
+  <div class="hidden md:flex space-x-6">
+    <a routerLink="/admin/profile" class="hover:text-gray-700">Profile</a>
+    <a routerLink="/admin/events" class="hover:text-gray-700">Manage Events</a>
+    <a routerLink="/admin/adoption" class="hover:text-gray-700">Manage Adoption</a>
+    <button (click)="logout()" class="hover:text-red-500">Logout</button>
+  </div>
+
+<nav class="bg-maincolor-primary font-monserrat shadow-md py-1 text-lg">
+
+  <div class="container mx-auto flex justify-between items-center xl:h-24">
+    <a href=""><img src="assets/images/logo.png" alt="logo" href="/" class="w-32 h-32"></a>
+    <div class="space-x-6">
+      <a routerLink="/" class="hover:underline"></a>
+      <a routerLink="/events" class="hover:underline">Event</a>
+      <a routerLink="/adoption" class="hover:underline">Adoption</a>
+      <a routerLink="/about" class="hover:underline">About Us</a>
+      <a routerLink="/contact" class="hover:underline">Contact Us</a>
+      <a class="" routerLink="/login">
+        <button class="w-6 h-6 bg-black rounded-full"></button>
+      </a>
+    </div>
+  </div>
+</nav>
+
