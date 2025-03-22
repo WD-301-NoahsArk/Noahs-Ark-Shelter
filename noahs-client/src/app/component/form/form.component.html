@@ -1,52 +1,44 @@
 <!-- Adoption Form Modal -->
 <div *ngIf="isAdoptionFormOpen" class="fixed top-0 left-0 w-full h-full flex justify-center items-center bg-maincolor-blacktext bg-opacity-50 backdrop-blur-md">
-    <div class="bg-maincolor-highlight3 p-10 rounded-lg w-[600px] max-w-full shadow-2xl transform transition-all duration-300 scale-100 hover:scale-105">
+  <div class="bg-maincolor-highlight3 p-10 rounded-lg w-[800px] max-w-full shadow-2xl transform transition-all duration-300 scale-100 hover:scale-105 flex gap-6">
+
+    <!-- Form Section -->
+    <div class="w-1/2">
       <h2 class="text-3xl font-bold mb-6 text-center text-maincolor-blacktext">Adoption Form</h2>
 
       <form class="space-y-6 font-monserrat *:font-monserrat">
         <div class="flex flex-col">
           <label for="name" class="text-maincolor-blacktext font-medium mb-2">Full Name</label>
           <input type="text" id="name" placeholder="Enter your full name"
-            class="bg-maincolor-primary text-maincolor-blacktext p-3 border
-          border-gray-300 rounded-lg focus:ring-2 placeholder-maincolor-blacktext
-          focus:ring-maincolor-highlight focus:outline-none
-          font-medium">
+            class="bg-maincolor-primary text-maincolor-blacktext p-3 border border-gray-300 rounded-lg focus:ring-2 placeholder-maincolor-blacktext focus:ring-maincolor-highlight focus:outline-none font-medium">
         </div>
 
         <div class="flex flex-col">
           <label for="email" class="text-maincolor-blacktext font-medium mb-2">Email</label>
           <input type="email" id="email" placeholder="Enter your email"
-            class="bg-maincolor-primary text-maincolor-blacktext p-3 border
-          border-gray-300 rounded-lg focus:ring-2 placeholder-maincolor-blacktext
-          focus:ring-maincolor-highlight focus:outline-none
-          font-medium">
+            class="bg-maincolor-primary text-maincolor-blacktext p-3 border border-gray-300 rounded-lg focus:ring-2 placeholder-maincolor-blacktext focus:ring-maincolor-highlight focus:outline-none font-medium">
         </div>
 
         <div class="flex flex-col">
           <label for="phone" class="text-maincolor-blacktext font-medium mb-2">Phone Number</label>
           <input type="tel" id="phone" placeholder="Enter your phone number"
-            class="bg-maincolor-primary text-maincolor-blacktext p-3 border
-          border-gray-300 rounded-lg focus:ring-2 placeholder-maincolor-blacktext
-          focus:ring-maincolor-highlight focus:outline-none
-          font-medium">
+            class="bg-maincolor-primary text-maincolor-blacktext p-3 border border-gray-300 rounded-lg focus:ring-2 placeholder-maincolor-blacktext focus:ring-maincolor-highlight focus:outline-none font-medium">
         </div>
 
         <div class="flex flex-col">
           <label for="petCode" class="text-maincolor-blacktext font-medium mb-2">Pet Code</label>
           <input type="text" id="petCode" placeholder="Enter the pet code (e.g., PCH001)"
-            class="bg-maincolor-primary text-maincolor-blacktext p-3 border
-          border-gray-300 rounded-lg focus:ring-2 placeholder-maincolor-blacktext
-          focus:ring-maincolor-highlight focus:outline-none
-          font-medium">
+            class="bg-maincolor-primary text-maincolor-blacktext p-3 border border-gray-300 rounded-lg focus:ring-2 placeholder-maincolor-blacktext focus:ring-maincolor-highlight focus:outline-none font-medium">
         </div>
 
         <div class="flex flex-col">
-          <label for="date" class="text-maincolor-blacktext font-medium mb-2">Date for Adoption</label>
-          <input type="date" id="date"
-            class="bg-maincolor-primary text-maincolor-blacktext p-3 border
-          border-gray-300 rounded-lg focus:ring-2 placeholder-maincolor-blacktext
-          focus:ring-maincolor-highlight focus:outline-none
-          font-medium">
+          <label class="text-maincolor-blacktext font-medium mb-2">Date & Time for Adoption</label>
+          <div class="flex gap-4">
+            <input type="date" id="adoptionDate"
+              class="bg-maincolor-primary text-maincolor-blacktext p-3 border border-gray-300 rounded-lg focus:ring-2 placeholder-maincolor-blacktext focus:ring-maincolor-highlight focus:outline-none font-medium w-1/2">
+            <input type="time" id="adoptionTime"
+              class="bg-maincolor-primary text-maincolor-blacktext p-3 border border-gray-300 rounded-lg focus:ring-2 placeholder-maincolor-blacktext focus:ring-maincolor-highlight focus:outline-none font-medium w-1/2">
+          </div>
         </div>
 
         <button type="submit" class="bg-maincolor-highlight font-medium text-white py-3 px-8 rounded-lg w-full hover:bg-maincolor-sectionsdark transition duration-300">
@@ -54,18 +46,23 @@
         </button>
       </form>
 
-
-      <button (click)="closeAdoptionForm()" class="mt-4 text-maincolor-whitetext hover:underline text-center w-full
-      font-medium">
+      <button (click)="closeAdoptionForm()" class="mt-4 text-maincolor-whitetext hover:underline text-center w-full font-medium">
         Cancel
       </button>
     </div>
-  </div>
 
-  <!-- ADOPT NOW Button -->
-  <div class="flex justify-center bg-maincolor-secondary pt-4 pb-8">
-    <app-button class=""
-    (click)="openAdoptionForm()"
-      label="Adopt Now">
-    </app-button>
+    <!-- Image Section -->
+    <div class="w-1/2 flex justify-center items-center">
+      <div class="w-full h-[600px] bg-gray-300 flex items-center justify-center rounded-lg shadow-lg">
+        <span class="text-gray-500">Image Placeholder</span>
+      </div>
+    </div>
   </div>
+</div>
+
+<!-- ADOPT NOW Button -->
+<div class="flex justify-center bg-maincolor-secondary pt-2 pb-8">
+  <button class="bg-[#D16A54] text-white py-4 px-8 rounded-lg font-bold hover:bg-[#D9C976]" (click)="openAdoptionForm()">
+    ADOPT NOW!
+  </button>
+</div>
