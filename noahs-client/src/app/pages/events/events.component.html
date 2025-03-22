@@ -1,0 +1,51 @@
+<section id="events" class="py-16 bg-maincolor-secondary
+  text-maincolor-blacktext font-monserrat">
+  <div class="max-w-7xl mx-auto px-4 flex">
+
+    <div class="w-3/4 pr-8">
+      <h2 class="text-4xl font-bold text-maincolor-blacktext text-balance mb-4">
+        {{ selectedEvent?.title }}
+      </h2>
+      <div class="rounded-lg mb-4 flex items-center justify-center">
+        <img *ngIf="selectedEvent?.thumbnail"
+          src="{{ selectedEvent?.thumbnail }}"
+          alt="{{ selectedEvent?.title }}"
+          class="max-h-full max-w-full object-contain">
+        <p *ngIf="!selectedEvent?.thumbnail" class="text-gray-400">Image Placeholder</p>
+      </div>
+      <div class="font-medium"
+        *ngIf="selectedEvent; else noEventSelected">
+        <p class="mb-4">
+          <strong>Venue:</strong> {{ selectedEvent.venue }}<br>
+          <strong>Dates:</strong> {{ selectedEvent.start_date | date }} - {{ selectedEvent.end_date | date }}
+        </p>
+        <p class="text-base leading-7">{{ selectedEvent.details }}</p>
+      </div>
+      <ng-template #noEventSelected>
+        <p class="text-base leading-7">Please select an event from the list to view details.</p>
+      </ng-template>
+    </div>
+
+    <aside class="w-1/4 bg-maincolor-highlight3 p-4 rounded-lg">
+      <h3 class="text-2xl font-bold mb-4 text-center uppercase
+        text-maincolor-highlight2 ">
+        Events
+      </h3>
+      <ul class="space-y-4">
+        <li class="border-b-maincolor-highlight2 border-b-2 py-2 text-center"
+          *ngFor="let event of eventData">
+          <a (click)="selectEvent(event)"
+             [class.font-bold]="selectedEvent?.title === event.title"
+             [class.text-maincolor-highlight2]="selectedEvent?.title === event.title"
+             class="text-lg hover:underline cursor-pointer transition-colors
+            duration-200 text-maincolor-highlight2" >
+            {{ event.title }}
+          </a>
+        </li>
+        <li *ngIf="eventData.length === 0" class="text-gray-700">
+          Loading events...
+        </li>
+      </ul>
+    </aside>
+  </div>
+</section>

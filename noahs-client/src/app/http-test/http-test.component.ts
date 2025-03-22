@@ -16,6 +16,6 @@ export class HttpTestComponent {
   testData$: Observable<any>
 
   constructor(private http: HttpService) {
-    this.testData$ = this.http.getTest()
+    this.testData$ = this.http.getEvents()
   }
 }

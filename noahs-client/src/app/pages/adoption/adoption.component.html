@@ -1,0 +1,53 @@
+<!-- Landscape Section -->
+<section class="h-64 flex items-center justify-center bg-maincolor-secondary overflow-hidden rounded-lg">
+      <img class="h-auto" src="/assets/images/landscape-image.jpg" alt="image description">
+      <h2 class="absolute text-white text-4xl font-bold">Adopt a Pet Today</h2>
+</section>
+
+<!-- Adoption Section -->
+<section class="bg-[#CFBF72] py-16">
+  <div class="container mx-auto grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8">
+
+    <!-- Pet Card -->
+    <div *ngFor="let pet of pets"
+      (click)="openModal(pet)"
+      class="group bg-[#E8D4A5] p-6 rounded-lg shadow-lg transform transition-all duration-300 hover:-translate-y-3 hover:shadow-2xl hover:scale-105 cursor-pointer">
+
+      <div class="bg-gray-200 h-48 flex items-center justify-center rounded-lg mb-4 overflow-hidden transition-transform duration-300 group-hover:scale-110">
+        <p class="text-gray-400">Image Placeholder</p>
+      </div>
+      <p class="text-lg font-bold">Name: {{ pet.name }}</p>
+      <p class="text-md">Availability: {{ pet.status }}</p>
+    </div>
+
+  </div>
+</section>
+
+<!-- Pet Details Modal -->
+<div *ngIf="selectedPet" class="fixed top-0 left-0 w-full h-full flex justify-center items-center bg-black bg-opacity-50 backdrop-blur-md">
+  <div class="bg-[#E8A04B] p-12 rounded-lg w-[600px] max-w-full shadow-2xl transform transition-all duration-300 scale-100 hover:scale-105">
+    <h2 class="text-2xl font-bold mb-6 text-center">Pet Card Modal</h2>
+
+    <div class="flex flex-col md:flex-row items-center md:items-start gap-8">
+
+      <div class="bg-gray-200 w-48 h-48 rounded-lg flex justify-center items-center">
+        <p class="text-gray-400">Image</p>
+      </div>
+
+      <div class="text-left text-black text-lg leading-8 w-full">
+        <p><strong>Name:</strong> {{ selectedPet.name }}</p>
+        <p><strong>Age:</strong> {{ selectedPet.age }}</p>
+        <p><strong>Personality:</strong> {{ selectedPet.personality }}</p>
+        <p><strong>Breed:</strong> {{ selectedPet.breed }}</p>
+        <p><strong>Status:</strong> {{ selectedPet.status }}</p>
+        <p><strong>Code:</strong> {{ selectedPet.code }}</p>
+      </div>
+    </div>
+
+    <button (click)="closeModal()" class="bg-[#D97373] text-white py-3 px-8 rounded-lg mt-8 w-full hover:bg-red-600 transition duration-300">
+      Close
+    </button>
+  </div>
+</div>
+
+<app-form></app-form>
