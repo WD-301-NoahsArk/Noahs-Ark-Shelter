@@ -1,66 +1,56 @@
 import { Component, OnInit } from '@angular/core';
-import { Carousel } from 'flowbite';
-import type { CarouselItem, CarouselOptions, CarouselInterface } from 'flowbite';
-import type { InstanceOptions } from 'flowbite';
 
 @Component({
   selector: 'app-about',
   templateUrl: './about.component.html',
-  styleUrl: './about.component.css'
+  styleUrls: ['./about.component.css']
 })
 export class AboutComponent implements OnInit {
+  private currentSlide = 0;
+  private slides!: NodeListOf<HTMLElement>;
+  private indicators!: NodeListOf<HTMLButtonElement>;
 
   ngOnInit(): void {
-    const carouselElement: HTMLElement | null = document.getElementById('carousel-example');
-    if (!carouselElement) return;
+    this.slides = document.querySelectorAll('.carousel-item');
+    this.indicators = document.querySelectorAll('.carousel-indicator');
 
-    const items: CarouselItem[] = [
-      {
-        position: 0,
-        el: document.getElementById('carousel-item-1') as HTMLElement,
-      },
-      {
-        position: 1,
-        el: document.getElementById('carousel-item-2') as HTMLElement,
-      },
-      {
-        position: 2,
-        el: document.getElementById('carousel-item-3') as HTMLElement,
-      },
-    ];
+    const prevButton = document.querySelector('.carousel-prev');
+    const nextButton = document.querySelector('.carousel-next');
 
-    const options: CarouselOptions = {
-      defaultPosition: 0,
-      interval: 3000,
-      indicators: {
-        activeClasses: 'bg-maincolor-200 dark:bg-maincolor-200',
-        inactiveClasses: 'bg-white',
-        items: [
-          {
-            position: 0,
-            el: document.getElementById('carousel-indicator-1') as HTMLElement,
-          },
-          {
-            position: 1,
-            el: document.getElementById('carousel-indicator-2') as HTMLElement,
-          },
-          {
-            position: 2,
-            el: document.getElementById('carousel-indicator-3') as HTMLElement,
-          },
-        ],
-      },
-    };
+    if (prevButton && nextButton) {
+      prevButton.addEventListener('click', () => this.changeSlide(this.currentSlide - 1));
+      nextButton.addEventListener('click', () => this.changeSlide(this.currentSlide + 1));
+    }
 
-    const instanceOptions: InstanceOptions = {
-      id: 'carousel-example',
-      override: true,
-    };
+    this.indicators.forEach((indicator, index) => {
+      indicator.addEventListener('click', () => this.changeSlide(index));
+    });
 
-    const carousel: CarouselInterface = new Carousel(carouselElement, items, options, instanceOptions);
-    carousel.cycle();
+    this.updateCarousel();
+  }
 
-    document.getElementById('data-carousel-prev')?.addEventListener('click', () => carousel.prev());
-    document.getElementById('data-carousel-next')?.addEventListener('click', () => carousel.next());
+  private changeSlide(newIndex: number): void {
+    if (newIndex < 0) {
+      this.currentSlide = this.slides.length - 1;
+    } else if (newIndex >= this.slides.length) {
+      this.currentSlide = 0;
+    } else {
+      this.currentSlide = newIndex;
+    }
+
+    this.updateCarousel();
+  }
+
+  private updateCarousel(): void {
+    this.slides.forEach((slide, index) => {
+      slide.classList.toggle('opacity-100', index === this.currentSlide);
+      slide.classList.toggle('opacity-0', index !== this.currentSlide);
+      slide.classList.toggle('hidden', index !== this.currentSlide);
+    });
+
+    this.indicators.forEach((indicator, index) => {
+      indicator.style.backgroundColor = index === this.currentSlide ? '#D16A54' : '#FFFFFF';
+      indicator.style.opacity = index === this.currentSlide ? '1' : '0.5';
+    });
   }
 }

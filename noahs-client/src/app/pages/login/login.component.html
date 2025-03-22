@@ -1,0 +1,45 @@
+<div class="flex">
+  <div class="w-1/2 overflow-hidden h-[90vh]">
+    <img class="w-full h-full object-cover object-[0px_-400px]"
+      src="/assets/images/login_image.jpg" alt="">
+  </div>
+
+  <div class="grid w-1/2
+    grid-cols-1 place-content-center place-items-center bg-maincolor-highlight3
+    space-y-4 h-[90vh]">
+    <img src="/assets/images/logo.png"
+      alt="Noah's Ark Logo"
+      class="mx-auto mb-4 h-56 w-56">
+    <h1 class="text-center text-4xl font-bold text-maincolor-blacktext">
+      Welcome back!
+    </h1>
+    <input type="text"
+      name="email"
+      id="email"
+      value=""
+      placeholder="Email"
+      class="w-6/12 rounded-lg border border-maincolor-blacktext
+      bg-maincolor-primary px-2 py-3 text-maincolor-blacktext
+      placeholder-maincolor-blacktext focus:outline-none font-medium
+      "
+    >
+
+    <input type="password"
+      name="user_pass"
+      id="user_pass"
+      value=""
+      placeholder="Password"
+      class="w-6/12 rounded-lg border border-maincolor-blacktext
+      bg-maincolor-primary px-2 py-3 text-maincolor-blacktext
+      placeholder-maincolor-blacktext focus:outline-none font-medium
+      "
+    >
+      <a class="text-maincolor-highlight2"
+      href="/login">
+      Don't have an account?</a>
+    <app-button class="px-20"
+      (click)="loginFunc()"
+      label="Log In"
+    ></app-button>
+  </div>
+</div>

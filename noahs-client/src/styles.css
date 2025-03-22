@@ -3,3 +3,12 @@
 @tailwind utilities;
 @plugin "flowbite/plugin";
 @source "../node_modules/flowbite";
+
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: "Montserrat Alternates", sans-serif;
+}
+
+p, a, span, li, label, input, textarea, select, button {
+  font-family: "Montserrat", sans-serif;
+}

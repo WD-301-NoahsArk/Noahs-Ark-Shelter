@@ -6,6 +6,7 @@
       <h2 class="text-4xl font-bold text-maincolor-blacktext text-balance mb-4">
         {{ selectedEvent?.title }}
       </h2>
+
       <div class="rounded-lg mb-4 flex items-center justify-center">
         <img *ngIf="selectedEvent?.thumbnail"
           src="{{ selectedEvent?.thumbnail }}"
@@ -21,6 +22,7 @@
         </p>
         <p class="text-base leading-7">{{ selectedEvent.details }}</p>
       </div>
+
       <ng-template #noEventSelected>
         <p class="text-base leading-7">Please select an event from the list to view details.</p>
       </ng-template>
