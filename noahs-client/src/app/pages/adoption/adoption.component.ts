@@ -18,7 +18,10 @@ export interface Animal {
   templateUrl: './adoption.component.html',
   styleUrls: ['./adoption.component.css'],
   standalone: true,
-  imports: [CommonModule, FormComponent]
+  imports: [
+    CommonModule,
+    FormComponent,
+  ]
 })
 
 export class AdoptionComponent implements OnInit {
@@ -49,6 +52,7 @@ export class AdoptionComponent implements OnInit {
   closeModal() {
     this.selectedPet = null;
   }
+
 }
 
 

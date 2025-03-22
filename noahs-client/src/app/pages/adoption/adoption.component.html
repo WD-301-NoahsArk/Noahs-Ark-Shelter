@@ -1,21 +1,32 @@
 <!-- Landscape Section -->
-<section class="h-64 flex items-center justify-center bg-maincolor-secondary overflow-hidden rounded-lg">
+<section class="h-64 flex items-center justify-center bg-maincolor-secondary overflow-hidden ">
   <img class="h-auto" src="/assets/images/landscape-image.jpg" alt="image description">
 </section>
 
 <!-- Adoption Section -->
-<section class="bg-[#CFBF72] py-16">
+<section class="bg-maincolor-secondary py-16">
   <div class="container mx-auto grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8">
 
     <!-- Pet Card -->
     <div *ngFor="let pet of pets"
       (click)="openModal(pet)"
-      class="group bg-[#E8D4A5] p-6 rounded-lg shadow-lg transform transition-all duration-300 hover:-translate-y-3 hover:shadow-2xl hover:scale-105 cursor-pointer">
-        <div class="bg-gray-300 h-48 flex items-center justify-center rounded-lg mb-4 overflow-hidden transition-transform duration-300 group-hover:scale-105">
-          <p class="text-gray-600">Image Placeholder</p>
-        </div>
+      class="group bg-maincolor-primary p-6 rounded-lg shadow-lg transform transition-all duration-300 hover:-translate-y-3 hover:shadow-2xl hover:scale-105 cursor-pointer">
+      <div class="bg-gray-300 h-48 flex items-center justify-center rounded-lg mb-4 overflow-hidden transition-transform duration-300 group-hover:scale-105">
+        <img class="w-full h-full object-cover"
+          src="{{ pet.animal_pic }}"
+          alt="{{ pet.name }} picture">
+      </div>
       <p class="text-lg font-bold">Name: {{ pet.name }}</p>
-      <p class="text-md">Availability: {{ pet.status }}</p>
+      <p *ngIf="pet.status; else notAvailable"
+        class="text-md">
+        Waiting for you
+      </p>
+      <ng-template #notAvailable>
+        <p class="text-md">
+          Not For Adoption or Pending Approval
+        </p>
+      </ng-template>
+
     </div>
 
   </div>
@@ -23,16 +34,20 @@
 
 <!-- Pet Details Modal -->
 <div *ngIf="selectedPet" class="fixed top-0 left-0 w-full h-full flex justify-center items-center bg-black bg-opacity-50 backdrop-blur-md">
-<div class="bg-maincolor-highlight3 p-12 rounded-lg w-[600px] max-w-full shadow-2xl transform transition-all duration-300 scale-100 hover:scale-105">
-<h2 class="text-2xl font-bold mb-6 text-center">Pet Card Modal</h2>
+  <div class="bg-maincolor-highlight3 p-8 rounded-lg w-[800px] max-w-full shadow-2xl transform transition-all duration-300 scale-100 hover:scale-105">
+    <h2 class="text-2xl font-bold mb-6 text-center">Pet Card Modal</h2>
 
-<div class="flex flex-col md:flex-row items-center md:items-start gap-8">
+    <!-- Modified layout: larger image with landscape orientation -->
+    <div class="grid grid-cols-1 md:grid-cols-5 gap-8">
+      <!-- Larger image container (3/5 of grid) -->
+      <div class="md:col-span-3 bg-gray-200 rounded-lg flex justify-center items-center overflow-hidden h-72">
+        <img class="w-full h-full object-cover object-center"
+          src="{{ selectedPet.animal_pic }}"
+          alt="{{ selectedPet.name }} picture">
+      </div>
 
-  <div class="bg-gray-200 w-80 h-60 rounded-lg flex justify-center items-center">
-    <p class="text-gray-400">Image</p>
-  </div>
-
-      <div class="text-left text-black text-lg leading-8 w-full">
+      <!-- Pet details (2/5 of grid) -->
+      <div class="md:col-span-2 text-left text-black text-lg leading-8 flex flex-col justify-center">
         <p><strong>Name:</strong> {{ selectedPet.name }}</p>
         <p><strong>Rescue Date:</strong> {{ selectedPet.rescue_date }}</p>
         <p><strong>Personality:</strong> {{ selectedPet.personality }}</p>
@@ -42,18 +57,11 @@
       </div>
     </div>
 
-    <button (click)="closeModal()" class="bg-[#D97373] text-white py-3 px-8 rounded-lg mt-8 w-full hover:bg-red-600 transition duration-300">
+    <button (click)="closeModal()" class="bg-maincolor-highlight
+      text-maincolor-whitetext py-3 px-8 rounded-lg mt-8 w-full
+      hover:bg-maincolor-highlight2 transition-all duration-300 hover:font-bold">
       Close
     </button>
   </div>
 </div>
-
-<button (click)="closeModal()" class="bg-maincolor-highlight
-  text-maincolor-whitetext py-3 px-8 rounded-lg mt-8 w-full
-  hover:bg-[#D9C976] transition-all duration-300 hover:font-bold">
-  Close
-</button>
-</div>
-</div>
-
 <app-form></app-form>
