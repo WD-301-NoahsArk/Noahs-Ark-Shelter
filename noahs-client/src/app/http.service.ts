@@ -51,4 +51,17 @@ export class HttpService {
       })
     );
   }
+
+  getAnimalByCode(petCode: string): Observable<Animal | null> {
+    return this.http.get<Animal>(`http://localhost:3000/animals/${petCode}`).pipe(
+      catchError(err => {
+        console.error("Couldn't find pet:", err);
+        return of(null);
+      })
+    );
+  }
+
+  submitAdoptionForm(adoptionData: any) {
+    return this.http.post('http://localhost:3000/adoptees', adoptionData);
+  }
 }

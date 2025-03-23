@@ -1,7 +1,8 @@
-import { Component } from '@angular/core';
-import { ButtonComponent } from "../button/button.component";
+import { Component, ChangeDetectorRef  } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, NgForm } from '@angular/forms';
+import { HttpService } from '../../http.service';
+import { Animal } from '../../pages/adoption/adoption.component';
 
 @Component({
   selector: 'app-form',
@@ -10,13 +11,25 @@ import { FormsModule } from '@angular/forms';
   templateUrl: './form.component.html',
   styleUrls: ['./form.component.css']
 })
+
 export class FormComponent {
+  adoption = {
+    first_name: '',
+    last_name: '',
+    email: '',
+    phone: '',
+    animal_code: '',
+    date_avail: ''
+  };
 
   isAdoptionFormOpen: boolean = false;
   petCode: string = '';
   petImage: string = 'assets/default-pet-image.png';
   adoptionDate: string = '';
   adoptionTime: string = '';
+  http: any;
+
+  constructor(private httpService: HttpService, private cdr: ChangeDetectorRef) {}
 
   // Opens the adoption form modal
   openAdoptionForm() {
@@ -29,29 +42,42 @@ export class FormComponent {
     this.isAdoptionFormOpen = false;
   }
 
-  // Updates pet image based on the pet code input
   updatePetImage() {
-    const petImages: { [key: string]: string } = {
-      'PCH001': 'assets/pets/pch001.jpg',
-      'PCH002': 'assets/pets/pch002.jpg',
-      'PCH003': 'assets/pets/pch003.jpg',
-      // Add more pet codes and their corresponding image URLs here
-    };
+    this.cdr.detectChanges();
 
-    this.petImage = petImages[this.petCode] || 'assets/default-pet-image.png';
+    if (!this.adoption.animal_code.trim()) {
+      this.petImage = 'assets/images/default-pet-image.avif';
+      return;
+    }
+
+    this.httpService.getAnimalByCode(this.adoption.animal_code).subscribe(
+      (pet: Animal | null) => {
+        if (pet) {
+        }
+        this.petImage = pet?.animal_pic || 'assets/images/default-pet-image.avif';
+      },
+      error => {
+        this.petImage = 'assets/images/default-pet-image.avif';
+      }
+    );
   }
 
-  // Handles form submission
-  submitApplication() {
-    console.log("Adoption Form Submitted!");
-    console.log("Full Name:", (document.getElementById('name') as HTMLInputElement).value);
-    console.log("Email:", (document.getElementById('email') as HTMLInputElement).value);
-    console.log("Phone:", (document.getElementById('phone') as HTMLInputElement).value);
-    console.log("Pet Code:", this.petCode);
-    console.log("Adoption Date:", this.adoptionDate);
-    console.log("Adoption Time:", this.adoptionTime);
 
-    // Close the form after submission
-    this.closeAdoptionForm();
+  submitApplication(form: NgForm) {
+    if (!form.valid) {
+      alert("Please fill in all required fields before submitting.");
+      return;
+    }
+
+    this.adoption.date_avail = `${this.adoptionDate} ${this.adoptionTime}`;
+
+    this.httpService.submitAdoptionForm(this.adoption).subscribe(
+      (response) => {
+        alert("Adoption request submitted successfully!");
+      },
+      (error) => {
+        alert("Something went wrong! Please try again.");
+      }
+    );
   }
 }
