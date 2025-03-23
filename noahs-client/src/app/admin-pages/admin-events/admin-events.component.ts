@@ -35,6 +35,15 @@ export interface EventUpdatePayload {
   end_date: string;
 }
 
+export interface EventCreatePayload {
+  title: string;
+  details: string;
+  thumbnail: string;
+  venue: string;
+  start_date: string;
+  end_date: string;
+}
+
 @Component({
   selector: 'app-admin-events',
   standalone: true,
@@ -46,11 +55,28 @@ export interface EventUpdatePayload {
   templateUrl: './admin-events.component.html',
   styleUrl: './admin-events.component.css'
 })
+
 export class AdminEventsComponent implements AfterViewInit, OnInit {
   @ViewChildren('eventText') eventTexts!: QueryList<ElementRef>;
   @ViewChildren('eventImage') eventImages!: QueryList<ElementRef>;
   events: Event[] = [];
   editStatus: boolean = true;
+  showAddForm: boolean = false;
+  newEvent: {
+    title: string;
+    details: string;
+    thumbnail: string;
+    venue: string;
+    start_date: string;
+    end_date: string;
+  } = {
+      title: '',
+      details: '',
+      thumbnail: '',
+      venue: '',
+      start_date: '',
+      end_date: ''
+    };
 
   constructor(private http: HttpService) { }
 
@@ -97,11 +123,66 @@ export class AdminEventsComponent implements AfterViewInit, OnInit {
   }
 
   add = () => {
-    console.log("Real");
+    this.showAddForm = true;
+    // Reset the new event form
+    this.newEvent = {
+      title: '',
+      details: '',
+      thumbnail: '',
+      venue: '',
+      start_date: '',
+      end_date: ''
+    };
+  }
+
+  submitNewEvent() {
+    if (!this.newEvent.title || !this.newEvent.venue || !this.newEvent.start_date || !this.newEvent.end_date) {
+      alert('Please fill in all required fields: Title, Venue, Start Date, and End Date');
+      return;
+    }
+
+    this.http.postEvent(this.newEvent).subscribe({
+      next: (response: EventResponse) => {
+        const createdEvent: Event = {
+          ...response,
+          isEditing: false
+        };
+        this.events.unshift(createdEvent);
+        this.showAddForm = false;
+        setTimeout(() => {
+          this.matchTextToImageHeight();
+        }, 100);
+        window.location.reload()
+      },
+      error: (error) => {
+        console.error('Error adding event:', error);
+        alert('Failed to add event. Please try again.');
+      }
+    });
+  }
+
+  cancelAdd() {
+    this.showAddForm = false;
   }
 
   del = () => {
     this.editStatus = false;
+  }
+
+  deleteEvent(event: Event) {
+    if (!this.editStatus) {
+      if (confirm(`Are you sure you want to delete this event? ${event.title}`)) {
+        this.http.delEvent(event._id).subscribe({
+          next: () => {
+            this.events = this.events.filter(event => event._id !== event._id);
+          },
+          error: (error) => {
+            console.error('Error deleting event:', error);
+            alert('Failed to delete event. Please try again.');
+          }
+        });
+      }
+    }
   }
 
   edit = () => {
@@ -152,7 +233,6 @@ export class AdminEventsComponent implements AfterViewInit, OnInit {
       next: (res: EventResponse) => {
         Object.assign(event, res);
         event.isEditing = false;
-        console.log("Event updated successfully");
       },
       error: (err) => {
         console.error("Error updating event", err);
@@ -161,9 +241,11 @@ export class AdminEventsComponent implements AfterViewInit, OnInit {
       },
       complete: () => {
         event.isEditing = false;
+        window.location.reload()
       }
     });
   }
+
   cancelEdit(event: Event) {
     event.isEditing = false;
     event.editData = undefined;

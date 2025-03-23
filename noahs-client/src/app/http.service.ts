@@ -4,7 +4,7 @@ import { catchError } from 'rxjs/operators'
 import { Observable, of } from 'rxjs'
 import { type Event } from './pages/events/events.component'
 import { type Animal } from './pages/adoption/adoption.component';
-import { EventResponse, EventUpdatePayload } from './admin-pages/admin-events/admin-events.component';
+import { EventCreatePayload, EventResponse, EventUpdatePayload } from './admin-pages/admin-events/admin-events.component';
 
 type JWT = {
   token: string
@@ -61,6 +61,32 @@ export class HttpService {
     }).pipe(
       catchError(err => {
         console.error("Couldn't update event: ", err);
+        throw err;
+      })
+    );
+  }
+
+  postEvent(payload: EventCreatePayload): Observable<EventResponse> {
+    return this.http.post<EventResponse>("http://localhost:3000/events", payload, {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem('token')}`
+      }
+    }).pipe(
+      catchError(err => {
+        console.error("Couldn't create event: ", err);
+        throw err;
+      })
+    );
+  }
+
+  delEvent(id: number): Observable<EventResponse> {
+    return this.http.delete<EventResponse>(`http://localhost:3000/events/${id}`, {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem('token')}`
+      }
+    }).pipe(
+      catchError(err => {
+        console.error("Couldn't delete event: ", err);
         throw err;
       })
     );

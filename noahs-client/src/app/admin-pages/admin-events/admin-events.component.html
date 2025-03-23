@@ -5,6 +5,46 @@
     <app-button (click)="del()" label="Delete"></app-button>
   </div>
 
+  <div *ngIf="showAddForm" class="mb-6 bg-maincolor-secondary p-4 rounded-md">
+    <h2 class="text-xl font-bold mb-4 text-maincolor-blacktext">Add New Event</h2>
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <div>
+        <label class="block text-maincolor-blacktext mb-1">Event Title*</label>
+        <input [(ngModel)]="newEvent.title" class="w-full p-2 rounded bg-maincolor-primary text-black" placeholder="Event Title">
+      </div>
+      <div>
+        <label class="block text-maincolor-blacktext mb-1">Venue*</label>
+        <input [(ngModel)]="newEvent.venue" class="w-full p-2 rounded bg-maincolor-primary text-black" placeholder="Venue">
+      </div>
+      <div>
+        <label class="block text-maincolor-blacktext mb-1">Start Date*</label>
+        <input [(ngModel)]="newEvent.start_date" type="date" class="w-full p-2 rounded bg-maincolor-primary text-black">
+      </div>
+      <div>
+        <label class="block text-maincolor-blacktext mb-1">End Date*</label>
+        <input [(ngModel)]="newEvent.end_date" type="date" class="w-full p-2 rounded bg-maincolor-primary text-black">
+      </div>
+      <div class="md:col-span-2">
+        <label class="block text-maincolor-blacktext mb-1">Details</label>
+        <textarea [(ngModel)]="newEvent.details" class="w-full p-2 rounded bg-maincolor-primary text-black h-32" placeholder="Event Details"></textarea>
+      </div>
+      <div class="md:col-span-2">
+        <label class="block text-maincolor-blacktext mb-1">Image URL</label>
+        <input [(ngModel)]="newEvent.thumbnail" class="w-full p-2 rounded bg-maincolor-primary text-black" placeholder="Image URL">
+        <div *ngIf="newEvent.thumbnail" class="mt-2">
+          <img [src]="newEvent.thumbnail" alt="Event Preview" class="max-h-40 rounded-sm">
+        </div>
+      </div>
+    </div>
+    <div class="flex space-x-4 mt-4">
+
+      <app-button (click)="submitNewEvent()" label="Save Event"></app-button>
+      <button (click)="cancelAdd()" class="bg-maincolor-highlight2 text-white
+        px-4 py-2 rounded-lg font-medium text-2xl">
+        Cancel
+      </button>
+    </div>
+  </div>
   <div class="overflow-x-auto rounded-md">
     <table class="min-w-full">
       <thead class="bg-maincolor-secondary text-maincolor-blacktext">
@@ -22,12 +62,12 @@
         <tr *ngFor="let event of events" class="text-maincolor-blacktext">
           <td class="p-2">
             <div *ngIf="event.isEditing; else editDeleteButtons" class="flex space-x-2">
-              <button (click)="submitEdit(event)" class="bg-green-500 px-2 py-2 rounded-sm">
+              <button (click)="submitEdit(event)" class="bg-maincolor-highlight px-2 py-2 rounded">
                 <svg class="w-6 h-6 stroke-maincolor-whitetext" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                   <path d="M5 13L9 17L19 7" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
                 </svg>
               </button>
-              <button (click)="cancelEdit(event)" class="bg-red-500 px-2 py-2 rounded-sm">
+              <button (click)="cancelEdit(event)" class="border-maincolor-highlight border-2 px-2 py-2 rounded">
                 <svg class="w-6 h-6 stroke-maincolor-whitetext" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                   <path d="M6 18L18 6M6 6l12 12" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
                 </svg>
@@ -41,9 +81,11 @@
                   </svg>
                 </i>
                 <ng-template #delButton>
-                  <svg class="w-6 h-6 stroke-maincolor-whitetext" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M4 6H20M16 6L15.7294 5.18807C15.4671 4.40125 15.3359 4.00784 15.0927 3.71698C14.8779 3.46013 14.6021 3.26132 14.2905 3.13878C13.9376 3 13.523 3 12.6936 3H11.3064C10.477 3 10.0624 3 9.70951 3.13878C9.39792 3.26132 9.12208 3.46013 8.90729 3.71698C8.66405 4.00784 8.53292 4.40125 8.27064 5.18807L8 6M18 6V16.2C18 17.8802 18 18.7202 17.673 19.362C17.3854 19.9265 16.9265 20.3854 16.362 20.673C15.7202 21 14.8802 21 13.2 21H10.8C9.11984 21 8.27976 21 7.63803 20.673C7.07354 20.3854 6.6146 19.9265 6.32698 19.362C6 18.7202 6 17.8802 6 16.2V6M14 10V17M10 10V17" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
-                  </svg>
+                  <button *ngIf="!editStatus" (click)="deleteEvent(event)">
+                    <svg class="w-6 h-6 stroke-maincolor-whitetext" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <path d="M4 6H20M16 6L15.7294 5.18807C15.4671 4.40125 15.3359 4.00784 15.0927 3.71698C14.8779 3.46013 14.6021 3.26132 14.2905 3.13878C13.9376 3 13.523 3 12.6936 3H11.3064C10.477 3 10.0624 3 9.70951 3.13878C9.39792 3.26132 9.12208 3.46013 8.90729 3.71698C8.66405 4.00784 8.53292 4.40125 8.27064 5.18807L8 6M18 6V16.2C18 17.8802 18 18.7202 17.673 19.362C17.3854 19.9265 16.9265 20.3854 16.362 20.673C15.7202 21 14.8802 21 13.2 21H10.8C9.11984 21 8.27976 21 7.63803 20.673C7.07354 20.3854 6.6146 19.9265 6.32698 19.362C6 18.7202 6 17.8802 6 16.2V6M14 10V17M10 10V17" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+                    </svg>
+                  </button>
                 </ng-template>
               </button>
             </ng-template>
@@ -51,35 +93,35 @@
 
           <td class="border-r-2 border-r-maincolor-sections p-2 border-b-2 border-maincolor-highlight w-96">
             <div *ngIf="event.isEditing; else displayTitle">
-              <input [(ngModel)]="event.editData!.title" class="w-full p-1 bg-white text-black" />
+              <input [(ngModel)]="event.editData!.title" class="w-full p-1 bg-maincolor-primary text-black" />
             </div>
             <ng-template #displayTitle>{{ event.title }}</ng-template>
           </td>
 
           <td class="border-r-2 border-r-maincolor-sections p-2 border-b-2 border-maincolor-highlight w-96">
             <div *ngIf="event.isEditing; else displayVenue">
-              <input [(ngModel)]="event.editData!.venue" class="w-full p-1 bg-white text-black" />
+              <input [(ngModel)]="event.editData!.venue" class="w-full p-1 bg-maincolor-primary text-black" />
             </div>
             <ng-template #displayVenue>{{ event.venue }}</ng-template>
           </td>
 
           <td class="border-r-2 border-r-maincolor-sections p-2 border-b-2 border-maincolor-highlight w-96">
             <div *ngIf="event.isEditing; else displayStartDate">
-              <input [(ngModel)]="event.editData!.start_date" type="date" class="w-full p-1 bg-white text-black" />
+              <input [(ngModel)]="event.editData!.start_date" type="date" class="w-full p-1 bg-maincolor-primary text-black" />
             </div>
             <ng-template #displayStartDate>{{ event.start_date }}</ng-template>
           </td>
 
           <td class="border-r-2 border-r-maincolor-sections p-2 border-b-2 border-maincolor-highlight w-96">
             <div *ngIf="event.isEditing; else displayEndDate">
-              <input [(ngModel)]="event.editData!.end_date" type="date" class="w-full p-1 bg-white text-black" />
+              <input [(ngModel)]="event.editData!.end_date" type="date" class="w-full p-1 bg-maincolor-primary text-black" />
             </div>
             <ng-template #displayEndDate>{{ event.end_date }}</ng-template>
           </td>
 
           <td class="border-r-2 border-r-maincolor-sections p-2 border-b-2 border-maincolor-highlight w-96 min-h-32">
             <div *ngIf="event.isEditing; else displayDetails">
-              <textarea [(ngModel)]="event.editData!.details" class="w-full p-1 bg-white text-black h-32"></textarea>
+              <textarea [(ngModel)]="event.editData!.details" class="w-full p-1 bg-maincolor-primary text-black h-32"></textarea>
             </div>
             <ng-template #displayDetails>
               <p #eventText class="overflow-y-auto h-full">{{ event.details }}</p>
@@ -88,7 +130,7 @@
 
           <td class="p-2 border-b-2 border-maincolor-highlight w-96">
             <div *ngIf="event.isEditing; else displayImage">
-              <input [(ngModel)]="event.editData!.thumbnail" class="w-full p-1 bg-white text-black" placeholder="Image URL" />
+              <input [(ngModel)]="event.editData!.thumbnail" class="w-full p-1 bg-maincolor-primary text-black" placeholder="Image URL" />
               <img [src]="event.editData!.thumbnail || event.thumbnail" alt="Event Image Preview" class="image-admin w-full h-full bg-gray-300 mt-2">
             </div>
             <ng-template #displayImage>
