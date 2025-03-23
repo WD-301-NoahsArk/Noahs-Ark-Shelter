@@ -2,7 +2,6 @@ import { Hono } from "hono";
 import { authenticate, authorize, corsTest } from "./middleware.js";
 import { preprocessStaff, collections } from "./db.js";
 import { ObjectId } from "mongodb";
-import { join } from 'path'
 import { writeFile, unlink } from 'fs/promises'
 import { fileURLToPath } from 'url'
 import { existsSync, mkdirSync } from 'fs'

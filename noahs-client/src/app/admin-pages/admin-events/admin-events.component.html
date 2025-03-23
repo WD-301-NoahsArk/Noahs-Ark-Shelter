@@ -4,7 +4,6 @@
     <app-button (click)="edit()" label="Edit"></app-button>
     <app-button (click)="del()" label="Delete"></app-button>
   </div>
-
   <div *ngIf="showAddForm" class="mb-6 bg-maincolor-secondary p-4 rounded-md">
     <h2 class="text-xl font-bold mb-4 text-maincolor-blacktext">Add New Event</h2>
     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -29,15 +28,28 @@
         <textarea [(ngModel)]="newEvent.details" class="w-full p-2 rounded bg-maincolor-primary text-black h-32" placeholder="Event Details"></textarea>
       </div>
       <div class="md:col-span-2">
-        <label class="block text-maincolor-blacktext mb-1">Image URL</label>
-        <input [(ngModel)]="newEvent.thumbnail" class="w-full p-2 rounded bg-maincolor-primary text-black" placeholder="Image URL">
+        <label class="block text-maincolor-blacktext mb-1">Event Image</label>
+        <div class="flex items-center space-x-2">
+          <input
+            type="file"
+            accept="image/*"
+            class="hidden"
+            #imageInput
+            (change)="onImageSelected($event)">
+          <button
+            (click)="imageInput.click()"
+            class="bg-maincolor-highlight2 text-white px-4 py-2 rounded-lg">
+            Browse Image
+          </button>
+          <span *ngIf="selectedFileName" class="text-maincolor-blacktext">{{selectedFileName}}</span>
+          <span *ngIf="isUploading" class="text-maincolor-blacktext ml-2">Uploading...</span>
+        </div>
         <div *ngIf="newEvent.thumbnail" class="mt-2">
           <img [src]="newEvent.thumbnail" alt="Event Preview" class="max-h-40 rounded-sm">
         </div>
       </div>
     </div>
     <div class="flex space-x-4 mt-4">
-
       <app-button (click)="submitNewEvent()" label="Save Event"></app-button>
       <button (click)="cancelAdd()" class="bg-maincolor-highlight2 text-white
         px-4 py-2 rounded-lg font-medium text-2xl">
@@ -90,35 +102,30 @@
               </button>
             </ng-template>
           </td>
-
           <td class="border-r-2 border-r-maincolor-sections p-2 border-b-2 border-maincolor-highlight w-96">
             <div *ngIf="event.isEditing; else displayTitle">
               <input [(ngModel)]="event.editData!.title" class="w-full p-1 bg-maincolor-primary text-black" />
             </div>
             <ng-template #displayTitle>{{ event.title }}</ng-template>
           </td>
-
           <td class="border-r-2 border-r-maincolor-sections p-2 border-b-2 border-maincolor-highlight w-96">
             <div *ngIf="event.isEditing; else displayVenue">
               <input [(ngModel)]="event.editData!.venue" class="w-full p-1 bg-maincolor-primary text-black" />
             </div>
             <ng-template #displayVenue>{{ event.venue }}</ng-template>
           </td>
-
           <td class="border-r-2 border-r-maincolor-sections p-2 border-b-2 border-maincolor-highlight w-96">
             <div *ngIf="event.isEditing; else displayStartDate">
               <input [(ngModel)]="event.editData!.start_date" type="date" class="w-full p-1 bg-maincolor-primary text-black" />
             </div>
             <ng-template #displayStartDate>{{ event.start_date }}</ng-template>
           </td>
-
           <td class="border-r-2 border-r-maincolor-sections p-2 border-b-2 border-maincolor-highlight w-96">
             <div *ngIf="event.isEditing; else displayEndDate">
               <input [(ngModel)]="event.editData!.end_date" type="date" class="w-full p-1 bg-maincolor-primary text-black" />
             </div>
             <ng-template #displayEndDate>{{ event.end_date }}</ng-template>
           </td>
-
           <td class="border-r-2 border-r-maincolor-sections p-2 border-b-2 border-maincolor-highlight w-96 min-h-32">
             <div *ngIf="event.isEditing; else displayDetails">
               <textarea [(ngModel)]="event.editData!.details" class="w-full p-1 bg-maincolor-primary text-black h-32"></textarea>
@@ -127,10 +134,23 @@
               <p #eventText class="overflow-y-auto h-full">{{ event.details }}</p>
             </ng-template>
           </td>
-
           <td class="p-2 border-b-2 border-maincolor-highlight w-96">
             <div *ngIf="event.isEditing; else displayImage">
-              <input [(ngModel)]="event.editData!.thumbnail" class="w-full p-1 bg-maincolor-primary text-black" placeholder="Image URL" />
+              <div class="flex items-center space-x-2">
+                <input
+                  type="file"
+                  accept="image/*"
+                  class="hidden"
+                  #editImageInput
+                  (change)="onEditImageSelected($event, event)">
+                <button
+                  (click)="editImageInput.click()"
+                  class="bg-maincolor-highlight2 text-white px-3 py-1 rounded-lg text-sm">
+                  Change Image
+                </button>
+                <span *ngIf="event.editImageName" class="text-maincolor-blacktext text-sm">{{event.editImageName}}</span>
+                <span *ngIf="event.isUploading" class="text-maincolor-blacktext text-sm ml-2">Uploading...</span>
+              </div>
               <img [src]="event.editData!.thumbnail || event.thumbnail" alt="Event Image Preview" class="image-admin w-full h-full bg-gray-300 mt-2">
             </div>
             <ng-template #displayImage>

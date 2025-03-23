@@ -59,11 +59,11 @@ export class HttpService {
         Authorization: `Bearer ${localStorage.getItem('token')}`
       }
     }).pipe(
-        catchError(err => {
-          console.error("Couldn't update event: ", err);
-          throw err;
-        })
-      )
+      catchError(err => {
+        console.error("Couldn't update event: ", err);
+        throw err;
+      })
+    )
   }
 
   getAnimalByCode(petCode: string): Observable<Animal | null> {
@@ -71,19 +71,6 @@ export class HttpService {
       catchError(err => {
         console.error("Couldn't find pet:", err);
         return of(null);
-      })
-    );
-  }
-
-  postEvent(payload: EventCreatePayload): Observable<EventResponse> {
-    return this.http.post<EventResponse>("http://localhost:3000/events", payload, {
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem('token')}`
-      }
-    }).pipe(
-      catchError(err => {
-        console.error("Couldn't create event: ", err);
-        throw err;
       })
     );
   }
@@ -103,5 +90,32 @@ export class HttpService {
 
   submitAdoptionForm(adoptionData: any) {
     return this.http.post('http://localhost:3000/adoptees', adoptionData);
+  }
+
+  postEvent(payload: EventCreatePayload): Observable<EventResponse> {
+    return this.http.post<EventResponse>("http://localhost:3000/events", payload, {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem('token')}`
+      }
+    }).pipe(
+      catchError(err => {
+        console.error("Couldn't create event: ", err);
+        throw err;
+      })
+    );
+  }
+
+  uploadFile(formData: FormData): Observable<any> {
+    return this.http.post<any>('http://localhost:3000/upload', formData, {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem('token')}`
+      },
+      reportProgress: true
+    }).pipe(
+      catchError(err => {
+        console.error("Couldn't upload file: ", err);
+        throw err;
+      })
+    );
   }
 }

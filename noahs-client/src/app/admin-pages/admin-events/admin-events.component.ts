@@ -24,6 +24,8 @@ export interface Event extends EventResponse {
     start_date: string;
     end_date: string;
   };
+  editImageName?: string;
+  isUploading?: boolean;
 }
 
 export interface EventUpdatePayload {
@@ -62,6 +64,11 @@ export class AdminEventsComponent implements AfterViewInit, OnInit {
   events: Event[] = [];
   editStatus: boolean = true;
   showAddForm: boolean = false;
+
+  selectedFile: File | null = null;
+  selectedFileName: string = '';
+  isUploading: boolean = false;
+
   newEvent: {
     title: string;
     details: string;
@@ -124,7 +131,6 @@ export class AdminEventsComponent implements AfterViewInit, OnInit {
 
   add = () => {
     this.showAddForm = true;
-    // Reset the new event form
     this.newEvent = {
       title: '',
       details: '',
@@ -133,11 +139,82 @@ export class AdminEventsComponent implements AfterViewInit, OnInit {
       start_date: '',
       end_date: ''
     };
+    this.selectedFile = null;
+    this.selectedFileName = '';
+    this.isUploading = false;
+  }
+
+  onImageSelected(event: any) {
+    const files = event.target.files;
+    if (files && files.length > 0) {
+      this.selectedFile = files[0];
+      this.selectedFileName = this.selectedFile?.name || '';
+
+      this.uploadFile();
+    }
+  }
+
+  onEditImageSelected(event: any, eventItem: Event) {
+    const files = event.target.files;
+    if (files && files.length > 0 && eventItem.editData) {
+      const file = files[0];
+      eventItem.editImageName = file.name;
+      eventItem.isUploading = true;
+
+      this.uploadEditFile(file, eventItem);
+    }
+  }
+
+  uploadFile() {
+    if (!this.selectedFile) return;
+
+    this.isUploading = true;
+
+    const formData = new FormData();
+    formData.append('file', this.selectedFile);
+
+    this.http.uploadFile(formData).subscribe({
+      next: (response: any) => {
+        this.newEvent.thumbnail = response.urlImage;
+        this.isUploading = false;
+      },
+      error: (error) => {
+        console.error('Error uploading file:', error);
+        alert('Failed to upload file. Please try again.');
+        this.isUploading = false;
+      }
+    });
+  }
+
+  uploadEditFile(file: File, eventItem: Event) {
+    if (!eventItem.editData) return;
+
+    const formData = new FormData();
+    formData.append('file', file);
+
+    this.http.uploadFile(formData).subscribe({
+      next: (response: any) => {
+        if (eventItem.editData) {
+          eventItem.editData.thumbnail = response.urlImage;
+        }
+        eventItem.isUploading = false;
+      },
+      error: (error) => {
+        console.error('Error uploading file:', error);
+        alert('Failed to upload file. Please try again.');
+        eventItem.isUploading = false;
+      }
+    });
   }
 
   submitNewEvent() {
     if (!this.newEvent.title || !this.newEvent.venue || !this.newEvent.start_date || !this.newEvent.end_date) {
       alert('Please fill in all required fields: Title, Venue, Start Date, and End Date');
+      return;
+    }
+
+    if (this.isUploading) {
+      alert('Please wait for the image to finish uploading.');
       return;
     }
 
@@ -152,7 +229,7 @@ export class AdminEventsComponent implements AfterViewInit, OnInit {
         setTimeout(() => {
           this.matchTextToImageHeight();
         }, 100);
-        window.location.reload()
+        window.location.reload();
       },
       error: (error) => {
         console.error('Error adding event:', error);
@@ -163,6 +240,8 @@ export class AdminEventsComponent implements AfterViewInit, OnInit {
 
   cancelAdd() {
     this.showAddForm = false;
+    this.selectedFile = null;
+    this.selectedFileName = '';
   }
 
   del = () => {
@@ -174,7 +253,7 @@ export class AdminEventsComponent implements AfterViewInit, OnInit {
       if (confirm(`Are you sure you want to delete this event? ${event.title}`)) {
         this.http.delEvent(event._id).subscribe({
           next: () => {
-            this.events = this.events.filter(event => event._id !== event._id);
+            this.events = this.events.filter(e => e._id !== event._id);
           },
           error: (error) => {
             console.error('Error deleting event:', error);
@@ -202,12 +281,19 @@ export class AdminEventsComponent implements AfterViewInit, OnInit {
         start_date: event.start_date,
         end_date: event.end_date
       };
+      event.editImageName = '';
+      event.isUploading = false;
     }
     event.isEditing = !event.isEditing;
   }
 
   submitEdit(event: Event) {
     if (!event.editData) return;
+
+    if (event.isUploading) {
+      alert('Please wait for the image to finish uploading.');
+      return;
+    }
 
     const updatePayload: EventUpdatePayload = {
       title: event.editData.title,
@@ -241,7 +327,7 @@ export class AdminEventsComponent implements AfterViewInit, OnInit {
       },
       complete: () => {
         event.isEditing = false;
-        window.location.reload()
+        window.location.reload();
       }
     });
   }
@@ -249,5 +335,7 @@ export class AdminEventsComponent implements AfterViewInit, OnInit {
   cancelEdit(event: Event) {
     event.isEditing = false;
     event.editData = undefined;
+    event.editImageName = '';
+    event.isUploading = false;
   }
 }
