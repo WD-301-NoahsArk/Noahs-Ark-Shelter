@@ -94,6 +94,15 @@ app.post("/events", authorize(["admin", "staff"]), async (c) => {
   return c.json({ message: "Event added!", id: result.insertedId }, 201);
 });
 
+app.get("/events/:id", async (c) => {
+  const { id } = c.req.param();
+  const event = await collections.events.findOne({ _id: new ObjectId(id) });
+  if (!event) {
+    return c.json({ message: "Event not found!" }, 404);
+  }
+  return c.json(event);
+});
+
 app.put("/events/:id", authorize(["admin", "staff"]), async (c) => {
   const { id } = c.req.param();
   const data = await c.req.json();
@@ -135,7 +144,7 @@ app.delete("/adoptees/:id", authorize(["admin"]), async (c) => {
 // get /admin
 app.use(corsTest);
 app.get("/admin", authorize(["admin"]), async (c) => {
-  return c.json({ message: "Welcome, Admin!" });
+  return c.json({ message: true });
 });
 
 export default app;
