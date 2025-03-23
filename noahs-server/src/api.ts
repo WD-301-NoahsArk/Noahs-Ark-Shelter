@@ -1,5 +1,5 @@
 import { Hono } from 'hono';
-import { collections } from '../src/db.js';
+import { collections } from './db.js';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import { corsTest } from './middleware.js';
