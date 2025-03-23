@@ -1,45 +1,60 @@
-<div class="flex">
-  <div class="w-1/2 overflow-hidden h-[90vh]">
-    <img class="w-full h-full object-cover object-[0px_-400px]"
-      src="/assets/images/login_image.jpg" alt="">
+<div class="flex flex-col md:flex-row">
+  <!-- Image Section -->
+  <div class="hidden sm:block w-full md:w-1/2 overflow-hidden h-[50vh] md:h-[90vh]">
+    <img class="w-full h-full object-cover"
+      src="/assets/images/login_image.jpg" alt="Login background image">
   </div>
 
-  <div class="grid w-1/2
+  <!-- Login Form Section -->
+  <div class="grid w-full md:w-1/2
     grid-cols-1 place-content-center place-items-center bg-maincolor-highlight3
-    space-y-4 h-[90vh]">
+    py-12 md:py-0 px-4 space-y-4 min-h-[90vh] md:h-[90vh]">
+
     <img src="/assets/images/logo.png"
       alt="Noah's Ark Logo"
-      class="mx-auto mb-4 h-56 w-56">
-    <h1 class="text-center text-4xl font-bold text-maincolor-blacktext">
+      class="mx-auto mb-4 h-32 w-32 sm:h-40 sm:w-40 md:h-56 md:w-56">
+
+    <h1 class="text-center text-2xl sm:text-3xl md:text-4xl font-bold text-maincolor-blacktext">
       Welcome back!
     </h1>
-    <input type="text"
-      name="email"
-      id="email"
-      value=""
-      placeholder="Email"
-      class="w-6/12 rounded-lg border border-maincolor-blacktext
-      bg-maincolor-primary px-2 py-3 text-maincolor-blacktext
-      placeholder-maincolor-blacktext focus:outline-none font-medium
-      "
-    >
 
-    <input type="password"
-      name="user_pass"
-      id="user_pass"
-      value=""
-      placeholder="Password"
-      class="w-6/12 rounded-lg border border-maincolor-blacktext
-      bg-maincolor-primary px-2 py-3 text-maincolor-blacktext
-      placeholder-maincolor-blacktext focus:outline-none font-medium
-      "
-    >
-      <a class="text-maincolor-highlight2"
-      href="/login">
-      Don't have an account?</a>
-    <app-button class="px-20"
-      (click)="loginFunc()"
-      label="Log In"
-    ></app-button>
+    <form [formGroup]="loginForm" (ngSubmit)="loginFunc()" class="w-full flex flex-col items-center space-y-4">
+
+      <input type="text"
+        formControlName="email"
+        placeholder="Email"
+        class="w-full sm:w-8/12 md:w-6/12 rounded-lg border border-maincolor-blacktext
+        bg-maincolor-primary px-2 py-3 text-maincolor-blacktext
+        placeholder-maincolor-blacktext focus:outline-none font-medium
+        ">
+
+      <input type="password"
+        formControlName="password"
+        placeholder="Password"
+        class="w-full sm:w-8/12 md:w-6/12 rounded-lg border border-maincolor-blacktext
+        bg-maincolor-primary px-2 py-3 text-maincolor-blacktext
+        placeholder-maincolor-blacktext focus:outline-none font-medium
+        ">
+
+      <a class="text-maincolor-highlight2" href="/login">
+        Don't have an account?
+      </a>
+
+      <app-button class="px-10 sm:px-16 md:px-20"
+        (click)="loginFunc()"
+        label="Log In"></app-button>
+    </form>
+    <p *ngIf="errorMessage" class="text-red-500 font-medium">{{ errorMessage }}</p>
   </div>
 </div>
+
+<section id="mission" class="py-12 sm:py-16 md:py-24 lg:py-32 bg-maincolor-primary text-maincolor-blacktext">
+  <div class="max-w-4xl mx-auto text-center px-4 sm:px-6">
+    <h2 class="text-3xl sm:text-4xl md:text-5xl font-bold mb-3 sm:mb-4 tracking-tight">Help Us Fulfill Our Mission</h2>
+    <p class="text-base sm:text-lg leading-7 mb-4 sm:mb-6">
+      At Noah's Ark Shelter, every paw print tells a story — a story of hope, resilience, and second chances. Our mission to rescue, rehabilitate,
+      and rehome animals in need is a journey we can't walk alone. It takes a community of compassionate hearts and helping hands to create a world where no animal suffers, and every tail wags with joy.
+    </p>
+    <app-button (click)="adoptFunc()" label="ADOPT NOW!"></app-button>
+  </div>
+</section>

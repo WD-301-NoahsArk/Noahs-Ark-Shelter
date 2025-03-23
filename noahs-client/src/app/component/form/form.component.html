@@ -1,47 +1,62 @@
 <!-- Adoption Form Modal -->
-<div *ngIf="isAdoptionFormOpen" class="fixed top-0 left-0 w-full h-full flex justify-center items-center bg-maincolor-blacktext bg-opacity-50 backdrop-blur-md">
-  <div class="bg-maincolor-highlight3 p-10 rounded-lg w-[800px] max-w-full shadow-2xl transform transition-all duration-300 scale-100 hover:scale-105 flex gap-6">
+<div *ngIf="isAdoptionFormOpen" class="fixed top-0 left-0 w-full h-full flex justify-center items-center bg-maincolor-blacktext bg-opacity-50 backdrop-blur-md p-4">
+  <div class="bg-maincolor-highlight3 p-6 md:p-10 rounded-lg w-full max-w-4xl shadow-2xl transform transition-all duration-300 scale-100 hover:scale-105 flex flex-col md:flex-row gap-6">
 
     <!-- Form Section -->
-    <div class="w-1/2">
-      <h2 class="text-3xl font-bold mb-6 text-center text-maincolor-blacktext">Adoption Form</h2>
+    <div class="w-full md:w-1/2">
+      <h2 class="text-2xl md:text-3xl font-bold mb-4 md:mb-6 text-center text-maincolor-blacktext">Adoption Form</h2>
 
-      <form class="space-y-6 font-monserrat *:font-monserrat">
+      <form #adoptionForm="ngForm" (ngSubmit)="submitApplication(adoptionForm)" class="space-y-6 font-monserrat *:font-monserrat">
+        <div class="flex flex-col">
+          <label for="name" class="text-maincolor-blacktext font-medium mb-2">First Name</label>
+          <input type="text" id="first_name" name="first_name" [(ngModel)]="adoption.first_name" required placeholder="Enter your first name"
+            class="bg-maincolor-primary text-maincolor-blacktext p-2 md:p-3 border border-gray-300 rounded-lg focus:ring-2 placeholder-maincolor-blacktext focus:ring-maincolor-highlight focus:outline-none font-medium">
+          <div *ngIf="adoptionForm.submitted && !adoption.first_name" class="text-red-500 mt-2">First Name is required.</div>
+        </div>
+
         <div class="flex flex-col">
           <label for="name" class="text-maincolor-blacktext font-medium mb-2">Full Name</label>
-          <input type="text" id="name" placeholder="Enter your full name"
-            class="bg-maincolor-primary text-maincolor-blacktext p-3 border border-gray-300 rounded-lg focus:ring-2 placeholder-maincolor-blacktext focus:ring-maincolor-highlight focus:outline-none font-medium">
+          <input type="text" id="last_name" name="last_name" [(ngModel)]="adoption.last_name" required placeholder="Enter your last name"
+            class="bg-maincolor-primary text-maincolor-blacktext p-2 md:p-3 border border-gray-300 rounded-lg focus:ring-2 placeholder-maincolor-blacktext focus:ring-maincolor-highlight focus:outline-none font-medium">
+          <div *ngIf="adoptionForm.submitted && !adoption.last_name" class="text-red-500 mt-2">Last Name is required.</div>
         </div>
 
         <div class="flex flex-col">
           <label for="email" class="text-maincolor-blacktext font-medium mb-2">Email</label>
-          <input type="email" id="email" placeholder="Enter your email"
-            class="bg-maincolor-primary text-maincolor-blacktext p-3 border border-gray-300 rounded-lg focus:ring-2 placeholder-maincolor-blacktext focus:ring-maincolor-highlight focus:outline-none font-medium">
+          <input type="email" id="email" name="email" [(ngModel)]="adoption.email" required placeholder="Enter your Email"
+            class="bg-maincolor-primary text-maincolor-blacktext p-2 md:p-3 border border-gray-300 rounded-lg focus:ring-2 placeholder-maincolor-blacktext focus:ring-maincolor-highlight focus:outline-none font-medium">
+          <div *ngIf="adoptionForm.submitted && !adoption.email" class="text-red-500 mt-2">Email is required.</div>
         </div>
 
         <div class="flex flex-col">
           <label for="phone" class="text-maincolor-blacktext font-medium mb-2">Phone Number</label>
-          <input type="tel" id="phone" placeholder="Enter your phone number"
-            class="bg-maincolor-primary text-maincolor-blacktext p-3 border border-gray-300 rounded-lg focus:ring-2 placeholder-maincolor-blacktext focus:ring-maincolor-highlight focus:outline-none font-medium">
+          <input type="tel" id="phone" name="phone" [(ngModel)]="adoption.phone" required placeholder="Enter your Phone Number"
+            class="bg-maincolor-primary text-maincolor-blacktext p-2 md:p-3 border border-gray-300 rounded-lg focus:ring-2 placeholder-maincolor-blacktext focus:ring-maincolor-highlight focus:outline-none font-medium">
+          <div *ngIf="adoptionForm.submitted && !adoption.phone" class="text-red-500 mt-2">Phone Number is required.</div>
         </div>
 
+        <!--PET CODE-->
         <div class="flex flex-col">
           <label for="petCode" class="text-maincolor-blacktext font-medium mb-2">Pet Code</label>
-          <input type="text" id="petCode" placeholder="Enter the pet code (e.g., PCH001)"
-            class="bg-maincolor-primary text-maincolor-blacktext p-3 border border-gray-300 rounded-lg focus:ring-2 placeholder-maincolor-blacktext focus:ring-maincolor-highlight focus:outline-none font-medium">
+          <input type="text" [(ngModel)]="adoption.animal_code" name="animal_code" (input)="updatePetImage()" placeholder="Enter pet code"
+            class="bg-maincolor-primary text-maincolor-blacktext p-2 md:p-3 border border-gray-300 rounded-lg focus:ring-2 placeholder-maincolor-blacktext focus:ring-maincolor-highlight focus:outline-none font-medium">
+          <div *ngIf="adoptionForm.submitted && !adoption.animal_code" class="text-red-500 mt-2">Pet Code is required.</div>
         </div>
 
         <div class="flex flex-col">
           <label class="text-maincolor-blacktext font-medium mb-2">Date & Time for Adoption</label>
-          <div class="flex gap-4">
-            <input type="date" id="adoptionDate"
-              class="bg-maincolor-primary text-maincolor-blacktext p-3 border border-gray-300 rounded-lg focus:ring-2 placeholder-maincolor-blacktext focus:ring-maincolor-highlight focus:outline-none font-medium w-1/2">
-            <input type="time" id="adoptionTime"
-              class="bg-maincolor-primary text-maincolor-blacktext p-3 border border-gray-300 rounded-lg focus:ring-2 placeholder-maincolor-blacktext focus:ring-maincolor-highlight focus:outline-none font-medium w-1/2">
+          <div class="flex flex-col sm:flex-row gap-2 sm:gap-4">
+            <input type="date" id="adoptionDate" name="adoptionDate" [(ngModel)]="adoptionDate" required
+              class="bg-maincolor-primary text-maincolor-blacktext p-2 md:p-3 border border-gray-300 rounded-lg focus:ring-2 placeholder-maincolor-blacktext focus:ring-maincolor-highlight focus:outline-none font-medium w-full sm:w-1/2">
+            <input type="time" id="adoptionTime" name="adoptionTime" [(ngModel)]="adoptionTime" required
+              class="bg-maincolor-primary text-maincolor-blacktext p-2 md:p-3 border border-gray-300 rounded-lg focus:ring-2 placeholder-maincolor-blacktext focus:ring-maincolor-highlight focus:outline-none font-medium w-full sm:w-1/2 mt-2 sm:mt-0">
           </div>
         </div>
+        <div *ngIf="adoptionForm.submitted && (!adoptionDate || !adoptionTime)" class="text-red-500 mt-2">
+          Date and time are required.
+        </div>
 
-        <button type="submit" class="bg-maincolor-highlight font-medium text-white py-3 px-8 rounded-lg w-full hover:bg-maincolor-sectionsdark transition duration-300">
+        <button type="submit" class="bg-maincolor-highlight font-medium text-white py-2 md:py-3 px-6 md:px-8 rounded-lg w-full hover:bg-maincolor-sectionsdark transition duration-300">
           Submit Application
         </button>
       </form>
@@ -51,18 +66,19 @@
       </button>
     </div>
 
-    <!-- Image Section -->
-    <div class="w-1/2 flex justify-center items-center">
-      <div class="w-full h-[600px] bg-gray-300 flex items-center justify-center rounded-lg shadow-lg">
-        <span class="text-gray-500">Image Placeholder</span>
+    <!-- Change back into this if image is bad -->
+  <!-- w-full h-[300px] md:h-[400px] lg:h-[500px] bg-gray-300 flex items-center justify-center rounded-lg shadow-lg -->
+    <div class="hidden md:flex w-full md:w-1/2 justify-center items-center mt-4 md:mt-0">
+      <div class="bg-gray-300 h-48 flex items-center justify-center rounded-lg mb-4 overflow-hidden transition-transform duration-300 group-hover:scale-105">
+        <img [src]="petImage" alt="Selected Pet" class="w-full h-full object-cover">
       </div>
     </div>
   </div>
 </div>
 
 <!-- ADOPT NOW Button -->
-<div class="flex justify-center bg-maincolor-secondary pt-2 pb-8">
-  <button class="bg-maincolor-highlight text-white py-4 px-8 rounded-lg font-bold hover:bg-maincolor-sections" (click)="openAdoptionForm()">
+<div class="flex justify-center bg-maincolor-secondary pt-2 pb-6 md:pb-8">
+  <button class="bg-maincolor-highlight text-white py-3 md:py-4 px-6 md:px-8 rounded-lg font-bold hover:bg-maincolor-sections" (click)="openAdoptionForm()">
     ADOPT NOW!
   </button>
 </div>

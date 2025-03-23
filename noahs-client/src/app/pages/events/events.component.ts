@@ -3,7 +3,7 @@ import { CommonModule, DatePipe } from '@angular/common';
 import { HttpService } from '../../http.service';
 
 export interface Event {
-  id: number;
+  _id: number;
   title: string;
   details: string;
   thumbnail: string;

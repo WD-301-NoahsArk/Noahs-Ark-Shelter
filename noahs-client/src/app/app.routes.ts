@@ -6,6 +6,8 @@ import { EventsComponent } from './pages/events/events.component';
 import { AdoptionComponent } from './pages/adoption/adoption.component';
 import { LoginComponent } from './pages/login/login.component';
 import { NotfoundComponent } from './pages/notfound/notfound.component';
+import { AdminAdoptionComponent } from './admin-pages/admin-adoption/admin-adoption.component';
+import { AdminEventsComponent } from './admin-pages/admin-events/admin-events.component';
 
 export const routes: Routes = [
   { path: '', component: HomeComponent },
@@ -14,5 +16,7 @@ export const routes: Routes = [
   { path: 'events', component: EventsComponent },
   { path: 'contact', component: ContactComponent },
   { path: 'login', component: LoginComponent },
+  { path: 'admin/adoption', component: AdminAdoptionComponent },
+  { path: 'admin/events', component: AdminEventsComponent },
   { path: '**', component: NotfoundComponent }
 ];
