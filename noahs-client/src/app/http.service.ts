@@ -51,7 +51,7 @@ export class HttpService {
         return of([]);
       })
     );
-  }
+  };
 
   putEvent(id: number, payload: EventUpdatePayload): Observable<EventResponse> {
     return this.http.put<EventResponse>(`http://localhost:3000/events/${id}`, payload, {
@@ -59,9 +59,18 @@ export class HttpService {
         Authorization: `Bearer ${localStorage.getItem('token')}`
       }
     }).pipe(
+        catchError(err => {
+          console.error("Couldn't update event: ", err);
+          throw err;
+        })
+      )
+  }
+
+  getAnimalByCode(petCode: string): Observable<Animal | null> {
+    return this.http.get<Animal>(`http://localhost:3000/animals/${petCode}`).pipe(
       catchError(err => {
-        console.error("Couldn't update event: ", err);
-        throw err;
+        console.error("Couldn't find pet:", err);
+        return of(null);
       })
     );
   }
@@ -92,4 +101,7 @@ export class HttpService {
     );
   }
 
+  submitAdoptionForm(adoptionData: any) {
+    return this.http.post('http://localhost:3000/adoptees', adoptionData);
+  }
 }

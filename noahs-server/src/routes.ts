@@ -17,6 +17,34 @@ app.get("/", (c) => c.text("API is running!"));
 app.get("/staff", async (c) => c.json(await collections.staff.find().toArray()));
 app.get("/animals", async (c) => c.json(await collections.animals.find().toArray()));
 app.get("/events", async (c) => c.json(await collections.events.find().toArray()));
+app.get('/animals/:petCode', async (c) => {
+  const petCode = c.req.param("petCode") || c.req.query("petCode");
+
+  try {
+    const pet = await collections.animals.findOne({ 
+      code: { $regex: new RegExp(`^${petCode}$`, "i") } 
+    });
+
+    if (!pet) {
+      return c.json({ message: "Pet not found" }, 404);
+    }
+
+    return c.json(pet);
+  } catch (error) {
+    console.error('Error fetching pet:', error);
+    return c.json({ message: "Internal Server Error" }, 500);
+  }
+});
+
+app.post("/adoptees", async (c) => {
+  try {
+    const body = await c.req.json();
+    await collections.adoptees.insertOne(body);
+    return c.json({ message: "Adoption request successful"});
+  } catch (error) {
+    return c.json({ message: "Internal Server Error" }, 500);
+  }
+});
 
 // LogIn
 app.use("*", authenticate);
@@ -117,12 +145,6 @@ app.delete("/events/:id", authorize(["admin", "staff"]), async (c) => {
 });
 
 //CRUD ADOPTEE
-app.post("/adoptees", async (c) => {
-  const data = await c.req.json();
-  const result = await collections.adoptees.insertOne(data);
-  return c.json({ message: "Adoptee request added!", id: result.insertedId }, 201);
-});
-
 app.get("/adoptees", authorize(["admin", "staff"]), async (c) => {
   const adoptees = await collections.adoptees.find().toArray();
   return c.json(adoptees);
