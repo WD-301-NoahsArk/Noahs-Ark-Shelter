@@ -4,6 +4,7 @@ import { catchError } from 'rxjs/operators'
 import { Observable, of } from 'rxjs'
 import { type Event } from './pages/events/events.component'
 import { type Animal } from './pages/adoption/adoption.component';
+import { EventResponse, EventUpdatePayload } from './admin-pages/admin-events/admin-events.component';
 
 type JWT = {
   token: string
@@ -35,7 +36,7 @@ export class HttpService {
       { email, password })
   }
 
-  goAdmin(bearerToken: string): Observable<AdminMess> {
+  getAdmin(bearerToken: string): Observable<AdminMess> {
     return this.http.get<AdminMess>("http://localhost:3000/admin", {
       headers: {
         Authorization: `Bearer ${bearerToken}`
@@ -51,4 +52,18 @@ export class HttpService {
       })
     );
   }
+
+  putEvent(id: number, payload: EventUpdatePayload): Observable<EventResponse> {
+    return this.http.put<EventResponse>(`http://localhost:3000/events/${id}`, payload, {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem('token')}`
+      }
+    }).pipe(
+      catchError(err => {
+        console.error("Couldn't update event: ", err);
+        throw err;
+      })
+    );
+  }
+
 }
