@@ -1,19 +1,42 @@
-<nav class="bg-maincolor-primary font-monserrat shadow-md py-1 text-lg">
+<nav class="bg-maincolor-primary font-monserrat shadow-md py-1 text-lg relative">
+  <div class="container mx-auto flex justify-between items-center xl:h-24 px-6">
+    <!-- Logo -->
+    <a routerLink="/">
+      <img src="assets/images/logo.png" alt="logo" class="w-32 h-32">
+    </a>
 
-  <div class="container mx-auto flex justify-between items-center xl:h-24">
-    <a href=""><img src="assets/images/logo.png" alt="logo" href="/" class="w-32 h-32"></a>
-    <div class="space-x-6">
-      <a routerLink="/" class="hover:underline"></a>
+    <!-- Hamburger Button -->
+    <button (click)="toggleMenu()" class="lg:hidden text-black focus:outline-none z-50 relative">
+      <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+      </svg>
+    </button>
+
+    <!-- Desktop Navbar Links -->
+    <div class="hidden lg:flex space-x-6">
       <a routerLink="/events" class="hover:underline">Event</a>
       <a routerLink="/adoption" class="hover:underline">Adoption</a>
       <a routerLink="/about" class="hover:underline">About Us</a>
       <a routerLink="/contact" class="hover:underline">Contact Us</a>
-      <a class="" routerLink="/login">
+      <a routerLink="/login">
         <button class="w-6 h-6 bg-black rounded-full"></button>
       </a>
     </div>
   </div>
+
+  <!-- Mobile Menu -->
+  <div [ngClass]="{'hidden': !isMenuOpen}" class="lg:hidden flex flex-col items-center bg-maincolor-primary py-4 absolute top-full left-0 w-full shadow-md transition-all duration-300 z-40">
+    <a routerLink="/events" (click)="closeMenu()" class="py-3 hover:underline w-full text-center">Event</a>
+      <div class="w-4/5 h-px bg-gray-700 my-1"></div>
+        <a routerLink="/adoption" (click)="closeMenu()" class="py-3 hover:underline w-full text-center">Adoption</a>
+          <div class="w-4/5 h-px bg-gray-700 my-1"></div>
+        <a routerLink="/about" (click)="closeMenu()" class="py-3 hover:underline w-full text-center">About Us</a>
+      <div class="w-4/5 h-px bg-gray-700 my-1"></div>
+    <a routerLink="/contact" (click)="closeMenu()" class="py-3 hover:underline w-full text-center">Contact Us</a>
+    <div class="w-4/5 h-px bg-gray-700 my-1"></div>
+
+    <a routerLink="/login" (click)="closeMenu()" class="py-3 w-full flex justify-center">
+      <button class="w-6 h-6 bg-black rounded-full"></button>
+    </a>
+  </div>
 </nav>
-
-
-

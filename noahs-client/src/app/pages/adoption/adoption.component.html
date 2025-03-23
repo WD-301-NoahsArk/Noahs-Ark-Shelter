@@ -1,53 +1,51 @@
 <!-- Landscape Section -->
-<section class="h-64 flex items-center justify-center bg-maincolor-secondary overflow-hidden ">
-  <img class="h-auto" src="/assets/images/landscape-image.jpg" alt="image description">
+<section class="h-auto md:h-64 flex items-center justify-center bg-maincolor-secondary overflow-hidden">
+  <img class="w-full max-h-64 object-cover" src="/assets/images/landscape-image.jpg" alt="image description">
 </section>
 
 <!-- Adoption Section -->
-<section class="bg-maincolor-secondary py-16">
-  <div class="container mx-auto grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8">
+<section class="bg-maincolor-secondary py-8 md:py-16">
+  <div class="container mx-auto px-4 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-8">
 
     <!-- Pet Card -->
     <div *ngFor="let pet of pets"
       (click)="openModal(pet)"
-      class="group bg-maincolor-primary p-6 rounded-lg shadow-lg transform transition-all duration-300 hover:-translate-y-3 hover:shadow-2xl hover:scale-105 cursor-pointer">
-      <div class="bg-gray-300 h-48 flex items-center justify-center rounded-lg mb-4 overflow-hidden transition-transform duration-300 group-hover:scale-105">
+      class="group bg-maincolor-primary p-4 md:p-6 rounded-lg shadow-lg transform transition-all duration-300 hover:-translate-y-3 hover:shadow-2xl hover:scale-105 cursor-pointer">
+      <div class="bg-gray-300 h-36 sm:h-48 flex items-center justify-center rounded-lg mb-4 overflow-hidden transition-transform duration-300 group-hover:scale-105">
         <img class="w-full h-full object-cover"
           src="{{ pet.animal_pic }}"
           alt="{{ pet.name }} picture">
       </div>
-      <p class="text-lg font-bold">Name: {{ pet.name }}</p>
+      <p class="text-base md:text-lg font-bold">Name: {{ pet.name }}</p>
       <p *ngIf="pet.status; else notAvailable"
-        class="text-md">
+        class="text-sm md:text-md">
         Waiting for you
       </p>
       <ng-template #notAvailable>
-        <p class="text-md">
+        <p class="text-sm md:text-md">
           Not For Adoption or Pending Approval
         </p>
       </ng-template>
-
     </div>
 
   </div>
 </section>
 
 <!-- Pet Details Modal -->
-<div *ngIf="selectedPet" class="fixed top-0 left-0 w-full h-full flex justify-center items-center bg-black bg-opacity-50 backdrop-blur-md">
-  <div class="bg-maincolor-highlight3 p-8 rounded-lg w-[800px] max-w-full shadow-2xl transform transition-all duration-300 scale-100 hover:scale-105">
-    <h2 class="text-2xl font-bold mb-6 text-center">Pet Card Modal</h2>
+<div *ngIf="selectedPet" class="fixed top-0 left-0 w-full h-full flex justify-center items-center bg-black bg-opacity-50 backdrop-blur-md p-4">
+  <div class="bg-maincolor-highlight3 p-4 md:p-8 rounded-lg w-full max-w-[800px] shadow-2xl transform transition-all duration-300 scale-100 hover:scale-105 max-h-[90vh] overflow-y-auto">
+    <h2 class="text-xl md:text-2xl font-bold mb-4 md:mb-6 text-center">Pet Card Modal</h2>
+    <div class="grid grid-cols-1 md:grid-cols-5 gap-4 md:gap-8">
 
-    <!-- Modified layout: larger image with landscape orientation -->
-    <div class="grid grid-cols-1 md:grid-cols-5 gap-8">
-      <!-- Larger image container (3/5 of grid) -->
-      <div class="md:col-span-3 bg-gray-200 rounded-lg flex justify-center items-center overflow-hidden h-72">
+      <!-- Image container -->
+      <div class="md:col-span-3 bg-gray-200 rounded-lg flex justify-center items-center overflow-hidden h-48 sm:h-64 md:h-72">
         <img class="w-full h-full object-cover object-center"
           src="{{ selectedPet.animal_pic }}"
           alt="{{ selectedPet.name }} picture">
       </div>
 
-      <!-- Pet details (2/5 of grid) -->
-      <div class="md:col-span-2 text-left text-black text-lg leading-8 flex flex-col justify-center">
+      <!-- Pet details  -->
+      <div class="md:col-span-2 text-left text-black text-base md:text-lg leading-6 md:leading-8 flex flex-col justify-center mt-4 md:mt-0">
         <p><strong>Name:</strong> {{ selectedPet.name }}</p>
         <p><strong>Rescue Date:</strong> {{ selectedPet.rescue_date }}</p>
         <p><strong>Personality:</strong> {{ selectedPet.personality }}</p>
@@ -58,8 +56,8 @@
     </div>
 
     <button (click)="closeModal()" class="bg-maincolor-highlight
-      text-maincolor-whitetext py-3 px-8 rounded-lg mt-8 w-full
-      hover:bg-maincolor-highlight2 transition-all duration-300 hover:font-bold">
+      text-maincolor-whitetext py-2 md:py-3 px-6 md:px-8 rounded-lg mt-6 md:mt-8 w-full
+      hover:bg-maincolor-highlight2 transition-all duration-300 hover:font-bold text-base md:text-lg">
       Close
     </button>
   </div>

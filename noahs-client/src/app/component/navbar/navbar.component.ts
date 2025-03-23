@@ -1,18 +1,24 @@
 import { Component } from '@angular/core';
 import { RouterModule } from '@angular/router';
-import { HttpService } from '../../http.service';
-import { AuthService } from '../../auth.service';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-navbar',
-  imports: [RouterModule],
+  standalone: true,
+  imports: [RouterModule, CommonModule],
   templateUrl: './navbar.component.html',
   styleUrl: './navbar.component.css',
-  providers: [HttpService, AuthService]
+  providers: []
 })
 export class NavbarComponent {
   isLoggedIn: boolean = false
+  isMenuOpen = false;
 
-  constructor(private http: HttpService, private authService: AuthService) { }
+  toggleMenu() {
+    this.isMenuOpen = !this.isMenuOpen;
+  }
 
+  closeMenu() {
+    this.isMenuOpen = false;
+  }
 }
