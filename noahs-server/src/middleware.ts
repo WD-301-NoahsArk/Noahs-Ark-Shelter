@@ -9,7 +9,7 @@ if (!JWT_SECRET) {
 }
 
 export const corsTest = cors({
-  origin: ["http://localhost:4200"],
+  origin: ["http://localhost:4200", "https://noahsark-shelter.netlify.app"],
 });
 
 export const authenticate = async (c: Context, next: Next) => {

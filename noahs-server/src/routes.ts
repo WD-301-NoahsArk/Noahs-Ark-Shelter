@@ -106,8 +106,8 @@ app.post('/upload', async (c) => {
 
     const fileId = res.data.id
 
-    await drive.permissions.create({
-      fileId: fileId,
+    drive.permissions.create({
+      fileId: fileId!,
       requestBody: {
         role: 'reader',
         type: 'anyone'
