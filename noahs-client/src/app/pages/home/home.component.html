@@ -1,149 +1,148 @@
 <div id="carousel-example" class="relative w-full font-monserrat bg-maincolor-secondary">
-<!-- Carousel Wrapper -->
-<div class="relative h-96 overflow-hidden sm:h-64 xl:h-80 2xl:h-96 flex justify-center items-center">
+  <!-- Carousel Wrapper -->
+  <div class="relative overflow-hidden h-[500px] xs:h-[550px] sm:h-[400px] md:h-[450px] lg:h-[500px] xl:h-[550px]">
+
     <!-- Item 1 -->
-    <div id="carousel-item-1" class=" ease-in-out left-14 bg-maincolor-secondary flex items-center justify-between p-8 w-full">
-        <!-- Text Section -->
-        <div class="w-1/2 pr-6">
-            <h5 class="mb-4 text-5xl font-bold ">Noah's Ark</h5>
-            <p class="text-lg">
-                Noah’s Ark Shelter is dedicated to rescuing, rehabilitating, and rehoming abandoned and abused animals. We provide medical care,
-                temporary shelter, and advocate for responsible pet ownership through education and outreach. Our mission is driven by compassion and commitment,
-                aiming to give every animal a second chance at a safe, loving, and permanent home.
-            </p>
-        </div>
-        <!-- Image Section -->
-        <div class="w-1/2">
-            <img src="/assets/images/noahsark.JPG" alt="Shelter Image" class="w-full h-auto ">
-        </div>
+    <div id="carousel-item-1" class="ease-in-out bg-maincolor-secondary w-full flex flex-col sm:flex-row items-center p-4 sm:p-6 md:p-8">
+      <!-- Text Section - Full width on mobile, half width on sm and up -->
+      <div class="w-full sm:w-1/2 pb-4 sm:pb-0 sm:pr-4 md:pr-6 text-center sm:text-left">
+        <h5 class="mb-2 sm:mb-3 md:mb-4 text-2xl xs:text-3xl sm:text-4xl md:text-5xl font-bold">Noah's Ark</h5>
+        <p class="text-sm xs:text-base sm:text-base md:text-lg">
+          Noah's Ark Shelter is dedicated to rescuing, rehabilitating, and rehoming abandoned and abused animals.
+          We provide medical care, temporary shelter, and advocate for responsible pet ownership through education and outreach.
+          Our mission is driven by compassion and commitment, ensuring every animal gets a second chance at a safe and loving home.
+        </p>
+      </div>
+
+      <div class="w-full sm:w-1/2 h-[200px] xs:h-[250px] sm:h-[300px] md:h-[350px]">
+        <img src="/assets/images/noahsark.JPG" alt="Shelter Image" class="w-full h-full object-cover">
+      </div>
     </div>
 
     <!-- Item 2 -->
-    <div id="carousel-item-2" class=" ease-in-out left-14 bg-maincolor-secondary flex items-center justify-between p-8 w-full">
-        <!-- Text Section -->
-        <div class="w-1/2 pr-6">
-            <h5 class="mb-4 text-5xl font-bold">Our Mission</h5>
-            <p class="text-lg">
-                Noah’s Ark Shelter is dedicated to rescuing, rehabilitating, and rehoming abandoned and abused animals.
-                We provide medical care, temporary shelter, and advocate for responsible pet ownership.
-                Our mission is driven by compassion, aiming to give every animal a second chance at a safe and loving home.
-            </p>
-        </div>
-        <!-- Image Section -->
-        <div class="flex w-1/2 justify-end items-end overflow-hidden max-h-[384px]">
-            <img src="/assets/images/rescued_pets.jpg" alt="Rescued Pets"
-            class="object-[0px_450px] object-cover"
-          >
-        </div>
+    <div id="carousel-item-2" class="hidden ease-in-out bg-maincolor-secondary w-full flex flex-col sm:flex-row items-center p-4 sm:p-6 md:p-8">
+      <div class="w-full sm:w-1/2 pb-4 sm:pb-0 sm:pr-4 md:pr-6 text-center sm:text-left">
+        <h5 class="mb-2 sm:mb-3 md:mb-4 text-2xl xs:text-3xl sm:text-4xl md:text-5xl font-bold">Our Mission</h5>
+        <p class="text-sm xs:text-base sm:text-base md:text-lg">
+        Join us in making a difference for animals in need! Whether you volunteer, adopt, or donate, your support helps provide food,
+        medical care, and shelter for rescued animals. We believe every act of kindness creates an opportunity for a brighter future,
+        bringing them one step closer to finding the safe and loving forever home they deserve.
+        </p>
+      </div>
+
+      <div class="w-full sm:w-1/2 h-[200px] xs:h-[250px] sm:h-[300px] md:h-[350px] overflow-hidden">
+        <img src="/assets/images/rescued_pets.jpg" alt="Rescued Pets" class="w-full h-full object-cover object-[50%_40%]">
+
+      </div>
     </div>
 
     <!-- Item 3 -->
-    <div id="carousel-item-3" class=" ease-in-out left-14 bg-maincolor-secondary flex items-center justify-between p-8 w-full">
-        <!-- Text Section -->
-        <div class="w-1/2 pr-6">
-            <h5 class="mb-4 text-5xl font-bold">Get Involved</h5>
-            <p class="text-lg">
-                Join us in making a difference for animals in need! Whether you choose to volunteer your time, open your home to a rescued pet through adoption,
-                or contribute through donations, your support helps provide food, medical care, and shelter for abandoned and homeless animals.
-                Every act of kindness brings them closer to a loving forever home.
-            </p>
-        </div>
-        <!-- Image Section -->
-        <div class="w-1/2">
-            <img src="/assets/images/volunteering.jpg" alt="Volunteer Work" class="w-full h-auto ">
-        </div>
+    <div id="carousel-item-3" class="hidden ease-in-out bg-maincolor-secondary w-full flex flex-col sm:flex-row items-center p-4 sm:p-6 md:p-8">
+      <div class="w-full sm:w-1/2 pb-4 sm:pb-0 sm:pr-4 md:pr-6 text-center sm:text-left">
+        <h5 class="mb-2 sm:mb-3 md:mb-4 text-2xl xs:text-3xl sm:text-4xl md:text-5xl font-bold">Get Involved</h5>
+        <p class="text-sm xs:text-base sm:text-base md:text-lg">
+          Together, we create a future where no animal is left behind. With each rescue, we offer not just safety but hope,
+          ensuring every pet receives proper care and a fresh start. Through our dedication and second chances,
+          we transform their past hardships into a future filled with warmth, love, and a place to finally call home.
+        </p>
+      </div>
+
+      <div class="w-full sm:w-1/2 h-[200px] xs:h-[250px] sm:h-[300px] md:h-[350px]">
+        <img src="/assets/images/volunteering.jpg" alt="Volunteer Work" class="w-full h-full object-cover">
+      </div>
     </div>
+  </div>
+
+  <!-- Slider indicators -->
+  <div
+  class="absolute bottom-5 left-1/2 z-40 flex -translate-x-1/2 space-x-3 rtl:space-x-reverse bg-maincolor-secondary">
+  <button
+      id="carousel-indicator-1"
+      type="button"
+      class="h-3 w-3 rounded-full  bg-maincolor-highlight"
+      aria-current="true"
+      aria-label="Slide 1"
+  ></button>
+
+    <button
+        id="carousel-indicator-2"
+        type="button"
+        class="h-3 w-3 rounded-full  bg-maincolor-highlight"
+        aria-current="false"
+        aria-label="Slide 2"
+    ></button>
+
+  <button
+      id="carousel-indicator-3"
+      type="button"
+      class="h-3 w-3 rounded-full bg-maincolor-highlight"
+      aria-current="false"
+      aria-label="Slide 3"
+  ></button>
 </div>
 
-    <!-- Slider indicators -->
-    <div
-        class="absolute bottom-5 left-1/2 z-40 flex -translate-x-1/2 space-x-3 rtl:space-x-reverse bg-maincolor-secondary">
-        <button
-            id="carousel-indicator-1"
-            type="button"
-            class="h-3 w-3 rounded-full  bg-maincolor-highlight"
-            aria-current="true"
-            aria-label="Slide 1"
-        ></button>
-        <button
-            id="carousel-indicator-2"
-            type="button"
-            class="h-3 w-3 rounded-full  bg-maincolor-highlight"
-            aria-current="false"
-            aria-label="Slide 2"
-        ></button>
-        <button
-            id="carousel-indicator-3"
-            type="button"
-            class="h-3 w-3 rounded-full bg-maincolor-highlight"
-            aria-current="false"
-            aria-label="Slide 3"
-        ></button>
-    </div>
-    <!-- Slider controls -->
-    <button
-        id="data-carousel-prev"
-        type="button"
-        class="group absolute left-0 top-0 z-40 flex h-full cursor-pointer items-center justify-center px-4 focus:outline-none"
-    >
-        <span
-            class="inline-flex h-10 w-10 items-center justify-center rounded-full"
-        >
-            <svg
-                class="h-4 w-4 text-maincolor-whitetext dark:text-white-800"
-                aria-hidden="true"
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 6 10"
-            >
-                <path
-                    stroke="currentColor"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    stroke-width="2"
-                    d="M5 1 1 5l4 4"
-                />
-            </svg>
-            <span class="hidden">Previous</span>
-        </span>
-    </button>
-    <button
-        id="data-carousel-next"
-        type="button"
-        class="group absolute right-0 top-0 z-40 flex h-full cursor-pointer items-center justify-center px-4 focus:outline-none"
-    >
-        <span
-            class="inline-flex h-10 w-10 items-center justify-center rounded-full"
-        >
-            <svg
-                class="h-4 w-4 text-maincolor-whitetext dark:text-white-100"
-                aria-hidden="true"
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 6 10"
-            >
-                <path
-                    stroke="currentColor"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    stroke-width="2"
-                    d="m1 9 4-4-4-4"
-                />
-            </svg>
-            <span class="hidden">Next</span>
-        </span>
-    </button>
+<!-- Slider controls -->
+<button
+  id="data-carousel-prev"
+  type="button"
+  class="group absolute left-0 top-0 z-40 flex h-full cursor-pointer items-center justify-center px-4 focus:outline-none"
+>
+  <span
+      class="inline-flex h-10 w-10 items-center justify-center rounded-full"
+  >
+      <svg
+          class="h-4 w-4 text-maincolor-whitetext dark:text-white-800"
+          aria-hidden="true"
+          xmlns="http://www.w3.org/2000/svg"
+          fill="none"
+          viewBox="0 0 6 10"
+      >
+          <path
+              stroke="currentColor"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M5 1 1 5l4 4"
+          />
+      </svg>
+      <span class="hidden">Previous</span>
+  </span>
+</button>
+<button
+  id="data-carousel-next"
+  type="button"
+  class="group absolute right-0 top-0 z-40 flex h-full cursor-pointer items-center justify-center px-4 focus:outline-none"
+>
+  <span
+      class="inline-flex h-10 w-10 items-center justify-center rounded-full"
+  >
+      <svg
+          class="h-4 w-4 text-maincolor-whitetext dark:text-white-100"
+          aria-hidden="true"
+          xmlns="http://www.w3.org/2000/svg"
+          fill="none"
+          viewBox="0 0 6 10"
+      >
+          <path
+              stroke="currentColor"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="m1 9 4-4-4-4"
+          />
+      </svg>
+      <span class="hidden">Next</span>
+  </span>
+</button>
 </div>
 
-<section id="mission" class="py-32 bg-maincolor-primary text-maincolor-blacktext">
-    <div class="max-w-4xl mx-auto text-center">
-      <h2 class="text-5xl font-bold mb-4 tracking-tight">Help Us Fulfill Our Mission</h2>
-      <p class="text-lg leading-7 mb-6">
-            At Noah’s Ark Shelter, every paw print tells a story — a story of hope, resilience, and second chances. Our mission to rescue, rehabilitate,
-            and rehome animals in need is a journey we can't walk alone. It takes a community of compassionate hearts and helping hands to create a world where no animal suffers, and every tail wags with joy.
-      </p>
-      <app-button (click)="adoptFunc()"
-        label="ADOPT NOW!"></app-button>
-    </div>
-  </section>
-
+<section id="mission" class="py-12 sm:py-16 md:py-24 lg:py-32 bg-maincolor-primary text-maincolor-blacktext">
+  <div class="max-w-4xl mx-auto text-center px-4 sm:px-6">
+    <h2 class="text-3xl sm:text-4xl md:text-5xl font-bold mb-3 sm:mb-4 tracking-tight">Help Us Fulfill Our Mission</h2>
+    <p class="text-base sm:text-lg leading-7 mb-4 sm:mb-6">
+      At Noah's Ark Shelter, every paw print tells a story — a story of hope, resilience, and second chances. Our mission to rescue, rehabilitate,
+      and rehome animals in need is a journey we can't walk alone. It takes a community of compassionate hearts and helping hands to create a world where no animal suffers, and every tail wags with joy.
+    </p>
+    <app-button (click)="adoptFunc()" label="ADOPT NOW!"></app-button>
+  </div>
+</section>
