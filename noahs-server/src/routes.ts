@@ -2,6 +2,13 @@ import { Hono } from "hono";
 import { authenticate, authorize, corsTest } from "./middleware.js";
 import { preprocessStaff, collections } from "./db.js";
 import { ObjectId } from "mongodb";
+import { join } from 'path'
+import { writeFile, unlink } from 'fs/promises'
+import { fileURLToPath } from 'url'
+import { existsSync, mkdirSync } from 'fs'
+import { google } from 'googleapis'
+import fs from 'fs'
+import path from 'path'
 import "dotenv/config";
 
 
@@ -10,6 +17,24 @@ const JWT_SECRET = process.env.JWT_SECRET;
 if (!JWT_SECRET) {
   throw new Error("JWT_SECRET is missing from environment variables!");
 }
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+const CLIENT_ID = process.env.CLIENT_ID
+const CLIENT_SECRET = process.env.CLIENT_SECRET
+const REDIRECT_URI = process.env.REDIRECT_URI
+const REFRESH_TOKEN = process.env.REFRESH_TOKEN
+
+const oauth2Client = new google.auth.OAuth2(
+    CLIENT_ID,
+    CLIENT_SECRET,
+    REDIRECT_URI
+)
+
+oauth2Client.setCredentials({ refresh_token: REFRESH_TOKEN })
+
+const drive = google.drive({ version: 'v3', auth: oauth2Client})
 
 // Public Routes
 app.use(corsTest);
@@ -21,8 +46,8 @@ app.get('/animals/:petCode', async (c) => {
   const petCode = c.req.param("petCode") || c.req.query("petCode");
 
   try {
-    const pet = await collections.animals.findOne({ 
-      code: { $regex: new RegExp(`^${petCode}$`, "i") } 
+    const pet = await collections.animals.findOne({
+      code: { $regex: new RegExp(`^${petCode}$`, "i") }
     });
 
     if (!pet) {
@@ -40,14 +65,67 @@ app.post("/adoptees", async (c) => {
   try {
     const body = await c.req.json();
     await collections.adoptees.insertOne(body);
-    return c.json({ message: "Adoption request successful"});
+    return c.json({ message: "Adoption request successful" });
   } catch (error) {
     return c.json({ message: "Internal Server Error" }, 500);
   }
 });
 
+
 // LogIn
 app.use("*", authenticate);
+
+app.post('/upload', async (c) => {
+  const formData = await c.req.formData()
+  const file = formData.get('file')
+
+  if (!file || !(file instanceof File)) {
+    return c.json({ message: 'No valid file uploaded' }, 400)
+  }
+
+  const dirPath = path.join(__dirname, 'assets', 'images')
+  if (!existsSync(dirPath)) {
+    mkdirSync(dirPath, { recursive: true })
+  }
+
+  const filePath = path.join(dirPath, file.name)
+  const buffer = await file.arrayBuffer()
+
+  try {
+    await writeFile(filePath, Buffer.from(buffer))
+
+    const res = await drive.files.create({
+      requestBody: {
+        name: file.name,
+        mimeType: file.type,
+      },
+      media: {
+        mimeType: file.type,
+        body: fs.createReadStream(filePath)
+      }
+    })
+
+    const fileId = res.data.id
+
+    await drive.permissions.create({
+      fileId: fileId,
+      requestBody: {
+        role: 'reader',
+        type: 'anyone'
+      }
+    })
+
+    await unlink(filePath)
+
+    return c.json({
+      message: 'File uploaded to Google Drive successfully',
+      urlImage: `https://lh3.googleusercontent.com/d/${res.data.id}`
+    })
+  } catch (err) {
+    console.error('Upload error:', err)
+    return c.json({ message: 'Error uploading file' }, 500)
+  }
+})
 
 // CRUD STAFF
 app.post("/staff", authorize(["admin"]), async (c) => {
@@ -61,12 +139,12 @@ app.post("/staff", authorize(["admin"]), async (c) => {
         error: err
       }, 400)
     }
-    
+
     const existingUser = await collections.staff.findOne({ email: staffMember!.email });
     if (existingUser) {
       return c.json({ message: "Staff already exists!" }, 400);
     }
-    
+
     const result = await collections.staff.insertOne(staffMember!);
     return c.json({ message: "Staff created!", id: result.insertedId }, 201);
   } catch (error) {
