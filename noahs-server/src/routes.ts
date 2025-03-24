@@ -38,7 +38,6 @@ const drive = google.drive({ version: 'v3', auth: oauth2Client})
 // Public Routes
 app.use(corsTest);
 app.get("/", (c) => c.text("API is running!"));
-app.get("/staff", async (c) => c.json(await collections.staff.find().toArray()));
 app.get("/animals", async (c) => c.json(await collections.animals.find().toArray()));
 app.get("/events", async (c) => c.json(await collections.events.find().toArray()));
 app.get('/animals/:petCode', async (c) => {
@@ -127,6 +126,8 @@ app.post('/upload', async (c) => {
 })
 
 // CRUD STAFF
+app.get("/staff", async (c) => c.json(await collections.staff.find().toArray()));
+
 app.post("/staff", authorize(["admin"]), async (c) => {
   try {
     const data = await c.req.json();
