@@ -5,6 +5,7 @@ import { Observable, of } from 'rxjs'
 import { type Event } from './pages/events/events.component'
 import { type Animal } from './pages/adoption/adoption.component';
 import { EventCreatePayload, EventResponse, EventUpdatePayload } from './admin-pages/admin-events/admin-events.component';
+import { AnimalCreatePayload, AnimalResponse, AnimalUpdatePayload } from './admin-pages/admin-adoption/admin-adoption.component';
 
 type JWT = {
   token: string
@@ -19,10 +20,13 @@ type AdminMess = {
 })
 
 export class HttpService {
+  //url: string = "https://noahs-ark-shelter.onrender.com/";
+  url: string = "http://localhost:3000";
+
   constructor(private http: HttpClient) { }
 
   getEvents(): Observable<Event[]> {
-    return this.http.get<Event[]>("http://localhost:3000/events", {}
+    return this.http.get<Event[]>(`${this.url}/events`, {}
     ).pipe(
       catchError(err => {
         console.error("Couldn't get data: ", err);
@@ -31,21 +35,8 @@ export class HttpService {
     )
   }
 
-  loginAdmin(email: string, password: string): Observable<JWT> {
-    return this.http.post<JWT>("http://localhost:3000/login",
-      { email, password })
-  }
-
-  getAdmin(bearerToken: string): Observable<AdminMess> {
-    return this.http.get<AdminMess>("http://localhost:3000/admin", {
-      headers: {
-        Authorization: `Bearer ${bearerToken}`
-      }
-    })
-  }
-
   getAnimals(): Observable<Animal[]> {
-    return this.http.get<Animal[]>("http://localhost:3000/animals").pipe(
+    return this.http.get<Animal[]>(`${this.url}/animals`).pipe(
       catchError(err => {
         console.error("Couldn't get animals data: ", err);
         return of([]);
@@ -53,8 +44,30 @@ export class HttpService {
     );
   };
 
+  getAnimalByCode(petCode: string): Observable<Animal | null> {
+    return this.http.get<Animal>(`${this.url}/animals/${petCode}`).pipe(
+      catchError(err => {
+        console.error("Couldn't find pet:", err);
+        return of(null);
+      })
+    );
+  }
+
+  getAdmin(bearerToken: string): Observable<AdminMess> {
+    return this.http.get<AdminMess>(`${this.url}/admin`, {
+      headers: {
+        Authorization: `Bearer ${bearerToken}`
+      }
+    })
+  }
+
+  loginAdmin(email: string, password: string): Observable<JWT> {
+    return this.http.post<JWT>(`${this.url}/login`,
+      { email, password })
+  }
+
   putEvent(id: number, payload: EventUpdatePayload): Observable<EventResponse> {
-    return this.http.put<EventResponse>(`http://localhost:3000/events/${id}`, payload, {
+    return this.http.put<EventResponse>(`${this.url}/events/${id}`, payload, {
       headers: {
         Authorization: `Bearer ${localStorage.getItem('token')}`
       }
@@ -66,17 +79,27 @@ export class HttpService {
     )
   }
 
-  getAnimalByCode(petCode: string): Observable<Animal | null> {
-    return this.http.get<Animal>(`http://localhost:3000/animals/${petCode}`).pipe(
+  putAnimal(id: number, payload: AnimalUpdatePayload): Observable<AnimalResponse> {
+    return this.http.put<AnimalResponse>(`${this.url}/animals/${id}`, payload, {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem('token')}`
+      }
+    }).pipe(
       catchError(err => {
-        console.error("Couldn't find pet:", err);
-        return of(null);
+        console.error("Couldn't update animal: ", err);
+        throw err;
       })
-    );
+    )
+      .pipe(
+        catchError(err => {
+          console.error("Couldn't update animal: ", err);
+          throw err;
+        })
+      )
   }
 
   delEvent(id: number): Observable<EventResponse> {
-    return this.http.delete<EventResponse>(`http://localhost:3000/events/${id}`, {
+    return this.http.delete<EventResponse>(`${this.url}/events/${id}`, {
       headers: {
         Authorization: `Bearer ${localStorage.getItem('token')}`
       }
@@ -88,12 +111,25 @@ export class HttpService {
     );
   }
 
+  delAnimal(id: number): Observable<AnimalResponse> {
+    return this.http.delete<AnimalResponse>(`${this.url}/animals/${id}`, {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem('token')}`
+      }
+    }).pipe(
+      catchError(err => {
+        console.error("Couldn't delete animal: ", err);
+        throw err;
+      })
+    );
+  }
+
   submitAdoptionForm(adoptionData: any) {
-    return this.http.post('http://localhost:3000/adoptees', adoptionData);
+    return this.http.post(`${this.url}/adoptees`, adoptionData);
   }
 
   postEvent(payload: EventCreatePayload): Observable<EventResponse> {
-    return this.http.post<EventResponse>("http://localhost:3000/events", payload, {
+    return this.http.post<EventResponse>(`${this.url}/events`, payload, {
       headers: {
         Authorization: `Bearer ${localStorage.getItem('token')}`
       }
@@ -105,8 +141,21 @@ export class HttpService {
     );
   }
 
+  postAnimal(payload: AnimalCreatePayload): Observable<AnimalResponse> {
+    return this.http.post<AnimalResponse>(`${this.url}/animals`, payload, {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem('token')}`
+      }
+    }).pipe(
+      catchError(err => {
+        console.error("Couldn't create animal: ", err);
+        throw err;
+      })
+    );
+  }
+
   uploadFile(formData: FormData): Observable<any> {
-    return this.http.post<any>('http://localhost:3000/upload', formData, {
+    return this.http.post<any>(`${this.url}/upload`, formData, {
       headers: {
         Authorization: `Bearer ${localStorage.getItem('token')}`
       },
