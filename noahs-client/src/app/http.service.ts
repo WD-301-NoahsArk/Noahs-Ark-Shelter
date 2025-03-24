@@ -20,7 +20,7 @@ type AdminMess = {
 })
 
 export class HttpService {
-  url: string = "https://noahs-ark-shelter.onrender.com/";
+  url: string = "https://noahs-ark-shelter.onrender.com";
   // url: string = "http://localhost:3000";
 
   constructor(private http: HttpClient) { }
