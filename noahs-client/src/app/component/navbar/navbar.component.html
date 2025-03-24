@@ -14,29 +14,45 @@
 
     <!-- Desktop Navbar Links -->
     <div class="hidden lg:flex space-x-6">
+      <a *ngIf="isAdmin" routerLink="/admin/events" class="hover:underline">Admin Events</a>
+      <a *ngIf="isAdmin" routerLink="/admin/adoption" class="hover:underline">Admin Adoption</a>
       <a routerLink="/events" class="hover:underline">Event</a>
       <a routerLink="/adoption" class="hover:underline">Adoption</a>
       <a routerLink="/about" class="hover:underline">About Us</a>
       <a routerLink="/contact" class="hover:underline">Contact Us</a>
       <a routerLink="/login">
-        <button class="w-6 h-6 bg-black rounded-full"></button>
+        <svg class="h-6 w-6 stroke-maincolor-blacktext" *ngIf="isAdmin; else notAdmin" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path d="M14.9999 15.2547C13.8661 14.4638 12.4872 14 10.9999 14C7.40399 14 4.44136 16.7114 4.04498 20.2013C4.01693 20.4483 4.0029 20.5718 4.05221 20.6911C4.09256 20.7886 4.1799 20.8864 4.2723 20.9375C4.38522 21 4.52346 21 4.79992 21H9.94465M13.9999 19.2857L15.7999 21L19.9999 17M14.9999 7C14.9999 9.20914 13.2091 11 10.9999 11C8.79078 11 6.99992 9.20914 6.99992 7C6.99992 4.79086 8.79078 3 10.9999 3C13.2091 3 14.9999 4.79086 14.9999 7Z"
+          stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path> </g></svg>
+        <ng-template #notAdmin>
+          <svg class="h-6 w-6 stroke-maincolor-blacktext" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path d="M15 16L20 21M20 16L15 21M11 14C7.13401 14 4 17.134 4 21H11M15 7C15 9.20914 13.2091 11 11 11C8.79086 11 7 9.20914 7 7C7 4.79086 8.79086 3 11 3C13.2091 3 15 4.79086 15 7Z"
+            stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path> </g></svg>
+        </ng-template>
       </a>
+      <button (click)="logout()" *ngIf="isAdmin">
+        <svg class="h-6 w-6" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier">
+          <path class="h-6 w-6 fill-maincolor-blacktext" d="M17.2929 14.2929C16.9024 14.6834 16.9024 15.3166 17.2929 15.7071C17.6834 16.0976 18.3166 16.0976 18.7071 15.7071L21.6201 12.7941C21.6351 12.7791 21.6497 12.7637 21.6637 12.748C21.87 12.5648 22 12.2976 22 12C22 11.7024 21.87 11.4352 21.6637 11.252C21.6497 11.2363 21.6351 11.2209 21.6201 11.2059L18.7071 8.29289C18.3166 7.90237 17.6834 7.90237 17.2929 8.29289C16.9024 8.68342 16.9024 9.31658 17.2929 9.70711L18.5858 11H13C12.4477 11 12 11.4477 12 12C12 12.5523 12.4477 13 13 13H18.5858L17.2929 14.2929Z"
+          ></path>
+          <path class="h-6 w-6 fill-maincolor-blacktext" d="M5 2C3.34315 2 2 3.34315 2 5V19C2 20.6569 3.34315 22 5 22H14.5C15.8807 22 17 20.8807 17 19.5V16.7326C16.8519 16.647 16.7125 16.5409 16.5858 16.4142C15.9314 15.7598 15.8253 14.7649 16.2674 14H13C11.8954 14 11 13.1046 11 12C11 10.8954 11.8954 10 13 10H16.2674C15.8253 9.23514 15.9314 8.24015 16.5858 7.58579C16.7125 7.4591 16.8519 7.35296 17 7.26738V4.5C17 3.11929 15.8807 2 14.5 2H5Z"
+          ></path> </g></svg>
+      </button>
     </div>
   </div>
 
   <!-- Mobile Menu -->
   <div [ngClass]="{'hidden': !isMenuOpen}" class="lg:hidden flex flex-col items-center bg-maincolor-primary py-4 absolute top-full left-0 w-full shadow-md transition-all duration-300 z-40">
     <a routerLink="/events" (click)="closeMenu()" class="py-3 hover:underline w-full text-center">Event</a>
-      <div class="w-4/5 h-px bg-gray-700 my-1"></div>
-        <a routerLink="/adoption" (click)="closeMenu()" class="py-3 hover:underline w-full text-center">Adoption</a>
-          <div class="w-4/5 h-px bg-gray-700 my-1"></div>
-        <a routerLink="/about" (click)="closeMenu()" class="py-3 hover:underline w-full text-center">About Us</a>
-      <div class="w-4/5 h-px bg-gray-700 my-1"></div>
+    <a *ngIf="isAdmin" routerLink="/admin/events" (click)="closeMenu()" class="py-3 hover:underline w-full text-center">Admin Events</a>
+    <div class="w-4/5 h-px bg-gray-700 my-1"></div>
+    <a routerLink="/adoption" (click)="closeMenu()" class="py-3 hover:underline w-full text-center">Adoption</a>
+    <a *ngIf="isAdmin" routerLink="/admin/adoption" (click)="closeMenu()" class="py-3 hover:underline w-full text-center">Admin Adoption</a>
+    <div class="w-4/5 h-px bg-gray-700 my-1"></div>
+    <a routerLink="/about" (click)="closeMenu()" class="py-3 hover:underline w-full text-center">About Us</a>
+    <div class="w-4/5 h-px bg-gray-700 my-1"></div>
     <a routerLink="/contact" (click)="closeMenu()" class="py-3 hover:underline w-full text-center">Contact Us</a>
     <div class="w-4/5 h-px bg-gray-700 my-1"></div>
-
     <a routerLink="/login" (click)="closeMenu()" class="py-3 w-full flex justify-center">
       <button class="w-6 h-6 bg-black rounded-full"></button>
     </a>
   </div>
 </nav>
+

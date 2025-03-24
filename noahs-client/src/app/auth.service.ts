@@ -19,6 +19,7 @@ export class AuthService {
 
     this.setAutoLogout(4 * 60 * 60 * 1000);
     this.authStatus.next(true)
+    window.location.href = "/"
   }
 
   logout() {
@@ -26,6 +27,7 @@ export class AuthService {
     localStorage.removeItem("token_expiry");
     this.authStatus.next(false)
     console.log("User logged out due to token expiration.");
+    window.location.href = "/"
   }
 
   setAutoLogout(expirationTime: number) {
