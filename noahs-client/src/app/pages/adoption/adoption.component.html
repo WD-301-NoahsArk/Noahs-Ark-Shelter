@@ -28,6 +28,11 @@
       </ng-template>
     </div>
 
+    <h2 *ngIf="pets.length === 0">
+      Loading pets...
+      <p class="text-nowrap">If content is not loading the server may be down, due to free web service from render</p>
+    </h2>
+
   </div>
 </section>
 
